@@ -1,4 +1,4 @@
-# <p align="center">`Amrita-Share</p>
+# <p align="center">Amrita-Share</p>
 
 <p align="center">Free WebRTC - SFU - Simple, Secure, Scalable Real-Time Video Conferences Up to 4k, compatible with all browsers and platforms.</p>
 
