@@ -52,14 +52,6 @@
 </details>
 
 <details>
-<summary>About</summary>
-
-- [Presentation](https://www.canva.com/design/DAE693uLOIU/view)
-- [Video](https://www.youtube.com/watch?v=_IVn2aINYww)
-
-</details>
-
-<details>
 <summary>Direct Join</summary>
 
 <br/>
