@@ -1878,34 +1878,6 @@ main {
     border-radius: 10px;
 }
 
-/*--------------------------------------------------------------
-# Sponsors
---------------------------------------------------------------*/
-
-.clients .section-inner {
-    padding-top: 26px;
-    padding-bottom: 26px;
-}
-
-.clients-inner ul {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-}
-
-.clients-inner li {
-    padding: 12px 28px;
-}
-
-@media (min-width: 641px) {
-    .clients .clients-inner ul {
-        flex-direction: row;
-    }
-}
-
 .changetext{
     line-height: 1.5;
     color: #fff;
