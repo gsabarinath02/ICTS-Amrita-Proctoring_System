@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-    mirotalksfu:
-        image: mirotalk/sfu:latest
+    amritaSharesfu:
+        image: amritaShare/sfu:latest
         build:
             context: .
             dockerfile: Dockerfile
