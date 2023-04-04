@@ -16,7 +16,7 @@ const surveyActive = true;
 
 const url = {
     ipLookup: 'https://extreme-ip-lookup.com/json/?key=demo2',
-    survey: 'https://www.questionpro.com/t/AUs7VZq02P',
+    survey: '#',
 };
 
 const _PEER = {
@@ -125,7 +125,7 @@ function initClient() {
         setTippy('chatButton', 'Toggle the chat', 'right');
         setTippy('whiteboardButton', 'Toggle the whiteboard', 'right');
         setTippy('settingsButton', 'Toggle the settings', 'right');
-        setTippy('aboutButton', 'About this project', 'right');
+        setTippy('aboutButton', 'About Amrita-share', 'right');
         setTippy('exitButton', 'Leave room', 'right');
         setTippy('mySettingsCloseBtn', 'Close', 'right');
         setTippy('tabDevicesBtn', 'Devices', 'top');
@@ -484,7 +484,7 @@ function whoAreYou() {
         background: swalBackground,
         title: 'Amrita-Share',
         input: 'text',
-        inputPlaceholder: 'Enter your name',
+        inputPlaceholder: 'Enter your Amrita Mail & Name',
         inputValue: default_name,
         html: initUser, // Inject HTML
         confirmButtonText: `Join meeting`,

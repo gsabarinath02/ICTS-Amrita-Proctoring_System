@@ -45,7 +45,7 @@ const image = {
     about: '../images/mirotalksfu-logo.png',
     avatar: '../images/mirotalksfu-logo.png',
     audio: '../images/audio.gif',
-    poster: '../images/loader.gif',
+    poster: '../images/loader1.gif',
     delete: '../images/delete.png',
     locked: '../images/locked.png',
     mute: '../images/mute.png',

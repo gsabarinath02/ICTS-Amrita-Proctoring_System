@@ -38,8 +38,6 @@
             property="og:description"
             content="Amrita-Share calling provides real-time video calls, messaging and screen sharing."
         />
-        <meta property="og:image" content="https://sfu.mirotalk.com/images/mirotalksfu.png" />
-
         <!-- StyleSheet -->
 
         <link rel="stylesheet" href="../css/Room.css" />
@@ -94,7 +92,7 @@
 
         <div id="loadingDiv" class="center pulsate">
             <h1>Loading</h1>
-            <img src="../images/loader.gif" />
+            <img src="../images/loader1.gif" / height="" width="">
             <pre>
 Please allow the camera or microphone
 access to use this app.
@@ -109,7 +107,10 @@ access to use this app.
                     playsinline="true"
                     autoplay=""
                     class="mirror"
-                    poster="../images/loader.gif"
+                    poster="../images/loader1.gif" 
+                    height=""
+                    
+                    width=""
                     style="object-fit: var(--videoObjFit)"
                 ></video>
                 <button id="initAudioButton" class="fas fa-microphone" onclick="handleAudio(event)"></button>
