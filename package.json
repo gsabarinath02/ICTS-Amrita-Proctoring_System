@@ -1,5 +1,5 @@
 {
-    "name": "mirotalksfu",
+    "name": "Amritashare",
     "version": "1.0.4",
     "description": "WebRTC SFU browser-based video calls",
     "main": "Server.js",
@@ -9,19 +9,19 @@
         "debug": "DEBUG='mediasoup*' node app/src/Server.js",
         "compile": "npx browserify public/sfu/MediasoupClientCompile.js -o public/sfu/MediasoupClient.js",
         "lint": "npx prettier --write .",
-        "docker-build": "docker build --tag mirotalk/sfu:latest .",
+        "docker-build": "docker build --tag Amrita_share/sfu:latest .",
         "docker-rmi": "docker images |grep '<none>' |awk '{print $3}' |xargs docker rmi",
-        "docker-push": "docker push mirotalk/sfu:latest",
-        "docker-pull": "docker pull mirotalk/sfu:latest",
-        "docker-rmc": "docker container rm mirotalksfu --force",
-        "docker-run": "docker run -d -p 40000-40100:40000-40100 -p 3010:3010 -v ./app/src/config.js:/src/app/src/config.js:ro --name mirotalksfu mirotalk/sfu:latest",
-        "docker-run-vm": "docker run -d -p 40000-40100:40000-40100 -p 3010:3010 -v ./app/:/src/app/:ro -v ./public/:/src/public/:ro --name mirotalksfu mirotalk/sfu:latest",
-        "docker-start": "docker start mirotalksfu",
-        "docker-stop": "docker stop mirotalksfu"
+        "docker-push": "docker push Amrita_share/sfu:latest",
+        "docker-pull": "docker pull Amrita_share/sfu:latest",
+        "docker-rmc": "docker container rm Amrita_share --force",
+        "docker-run": "docker run -d -p 40000-40100:40000-40100 -p 3010:3010 -v ./app/src/config.js:/src/app/src/config.js:ro --name Amrita_share Amrita_share/sfu:latest",
+        "docker-run-vm": "docker run -d -p 40000-40100:40000-40100 -p 3010:3010 -v ./app/:/src/app/:ro -v ./public/:/src/public/:ro --name Amrita_share Amrita_share/sfu:latest",
+        "docker-start": "docker start Amrita_share",
+        "docker-stop": "docker stop Amrita_share"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/miroslavpejic85/mirotalksfu"
+        "url": "git+https://github.com/gsabarinath02/ICTS-Amrita-Proctoring_System"
     },
     "keywords": [
         "webrtc",
@@ -30,7 +30,7 @@
         "nodejs",
         "video"
     ],
-    "author": "Miroslav Pejic",
+    "author": "G Sabarinath",
     "license": "AGPL-3.0",
     "dependencies": {
         "@sentry/integrations": "7.46.0",
@@ -42,7 +42,7 @@
         "crypto-js": "4.1.1",
         "express": "4.18.2",
         "httpolyglot": "0.1.2",
-        "mediasoup": "3.11.20",
+        "mediasoup": "3.11.21",
         "mediasoup-client": "3.6.83",
         "ngrok": "^4.3.3",
         "qs": "6.11.1",
