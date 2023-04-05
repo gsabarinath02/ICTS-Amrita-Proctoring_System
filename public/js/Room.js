@@ -1490,6 +1490,10 @@ function handleRoomClientEvents() {
     });
     rc.on(RoomClient.EVENTS.exitRoom, () => {
         console.log('Room Client leave room');
+        if (rc.isRecording() || recordingStatus.innerHTML != '0s') {
+            console.log('Room Client save recording before to exit');
+            rc.stopRecording();
+        }
         if (surveyActive) {
             leaveFeedback();
         } else {
@@ -2316,4 +2320,4 @@ function showAbout() {
     });
 }
 
-// ####################################################
+// #############################################
