@@ -2303,7 +2303,7 @@ function showAbout() {
         background: swalBackground,
         imageUrl: image.about,
         position: 'center',
-        title: 'WebRTC SFU',
+        title: 'Amrita Share',
         html: `
         <br/>
         `,
