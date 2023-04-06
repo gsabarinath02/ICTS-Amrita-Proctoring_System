@@ -125,7 +125,7 @@ function initClient() {
         setTippy('chatButton', 'Toggle the chat', 'right');
         setTippy('whiteboardButton', 'Toggle the whiteboard', 'right');
         setTippy('settingsButton', 'Toggle the settings', 'right');
-        setTippy('aboutButton', 'About this project', 'right');
+        setTippy('aboutButton', 'About Amrita-share', 'right');
         setTippy('exitButton', 'Leave room', 'right');
         setTippy('mySettingsCloseBtn', 'Close', 'right');
         setTippy('tabDevicesBtn', 'Devices', 'top');
@@ -144,6 +144,7 @@ function initClient() {
         );
         setTippy('switchPitchBar', 'Toggle audio pitch bar', 'right');
         setTippy('switchSounds', 'Toggle the sounds notifications', 'right');
+        setTippy('switchPitchBar', 'Toggle audio pitch bar', 'right');
         setTippy('whiteboardGhostButton', 'Toggle transparent background', 'bottom');
         setTippy('wbBackgroundColorEl', 'Background color', 'bottom');
         setTippy('wbDrawingColorEl', 'Drawing color', 'bottom');
@@ -156,7 +157,6 @@ function initClient() {
         setTippy('whiteboardTextBtn', 'Add text', 'bottom');
         setTippy('whiteboardLineBtn', 'Add line', 'bottom');
         setTippy('whiteboardRectBtn', 'Add rectangle', 'bottom');
-        setTippy('whiteboardTriangleBtn', 'Add triangle', 'bottom');
         setTippy('whiteboardCircleBtn', 'Add circle', 'bottom');
         setTippy('whiteboardSaveBtn', 'Save', 'bottom');
         setTippy('whiteboardEraserBtn', 'Eraser', 'bottom');
@@ -176,6 +176,7 @@ function initClient() {
         setTippy('chatGhostButton', 'Toggle transparent background', 'bottom');
         setTippy('chatCloseButton', 'Close', 'right');
         setTippy('participantsCloseBtn', 'Close', 'left');
+        setTippy('sessionTime', 'Session time', 'top');
     }
     setupWhiteboard();
     initEnumerateDevices();
@@ -483,7 +484,7 @@ function whoAreYou() {
         background: swalBackground,
         title: 'Amrita-Share',
         input: 'text',
-        inputPlaceholder: 'Enter your name',
+        inputPlaceholder: 'Enter your Amrita Mail & Name',
         inputValue: default_name,
         html: initUser, // Inject HTML
         confirmButtonText: `Join meeting`,
@@ -817,7 +818,7 @@ function startSessionTimer() {
     let callStartTime = Date.now();
     setInterval(function printTime() {
         let callElapsedTime = Date.now() - callStartTime;
-        sessionTime.innerHTML = getTimeToString(callElapsedTime);
+        sessionTime.innerHTML = ' ' + getTimeToString(callElapsedTime);
     }, 1000);
 }
 
@@ -854,7 +855,7 @@ function startRecordingTimer() {
     recTimer = setInterval(function printTime() {
         if (rc.isRecording()) {
             recElapsedTime++;
-            recordingStatus.innerHTML = secondsToHms(recElapsedTime);
+            recordingStatus.innerHTML = '🔴 REC ' + secondsToHms(recElapsedTime);
         }
     }, 1000);
 }
@@ -1001,11 +1002,9 @@ function handleButtons() {
         // rc.pauseProducer(RoomClient.mediaType.video);
     };
     startScreenButton.onclick = () => {
-        if (isHideMeActive) rc.handleHideMe();
         rc.produce(RoomClient.mediaType.screen);
     };
     stopScreenButton.onclick = () => {
-        if (isHideMeActive) rc.handleHideMe();
         rc.closeProducer(RoomClient.mediaType.screen);
     };
     fileShareButton.onclick = () => {
@@ -1055,9 +1054,6 @@ function handleButtons() {
     };
     whiteboardRectBtn.onclick = () => {
         whiteboardAddObj('rect');
-    };
-    whiteboardTriangleBtn.onclick = () => {
-        whiteboardAddObj('triangle');
     };
     whiteboardCircleBtn.onclick = () => {
         whiteboardAddObj('circle');
@@ -1260,11 +1256,9 @@ function handleSelects() {
     // room
     switchPitchBar.onchange = (e) => {
         isPitchBarEnabled = e.currentTarget.checked;
-        rc.roomMessage('pitchBar', isPitchBarEnabled);
     };
     switchSounds.onchange = (e) => {
         isSoundEnabled = e.currentTarget.checked;
-        rc.roomMessage('sounds', isSoundEnabled);
     };
     switchLobby.onchange = (e) => {
         isLobbyEnabled = e.currentTarget.checked;
@@ -1520,7 +1514,7 @@ function leaveFeedback() {
         background: swalBackground,
         imageUrl: image.feedback,
         title: 'Leave a feedback',
-        text: 'Do you want to rate your Amrita-share experience?',
+        text: 'Do you want to rate your amrita-share experience?',
         confirmButtonText: `Yes`,
         denyButtonText: `No`,
         showClass: {
@@ -1864,20 +1858,6 @@ function whiteboardAddObj(type) {
                 strokeWidth: wbCanvas.freeDrawingBrush.width,
             });
             addWbCanvasObj(rect);
-            break;
-        case 'triangle':
-            const triangle = new fabric.Triangle({
-                top: 0,
-                left: 0,
-                width: 150,
-                height: 100,
-                fill: 'transparent',
-                stroke: wbCanvas.freeDrawingBrush.color,
-                strokeWidth: wbCanvas.freeDrawingBrush.width,
-            });
-            addWbCanvasObj(triangle);
-            break;
-        default:
             break;
     }
 }
@@ -2340,4 +2320,4 @@ function showAbout() {
     });
 }
 
-// #############################################
+// ####################################################
