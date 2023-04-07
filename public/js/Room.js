@@ -177,6 +177,7 @@ function initClient() {
         setTippy('chatCloseButton', 'Close', 'right');
         setTippy('participantsCloseBtn', 'Close', 'left');
         setTippy('sessionTime', 'Session time', 'top');
+        setTippy('participantsSaveBtn', 'Save participants info', 'right');
     }
     setupWhiteboard();
     initEnumerateDevices();
@@ -422,9 +423,17 @@ function getRoomPassword() {
 
 function getPeerInfo() {
     peer_info = {
-        user_agent: userAgent,
-        detect_rtc_version: DetectRTC.version,
-        is_webrtc_supported: DetectRTC.isWebRTCSupported,
+        // user_agent: userAgent,
+        // detect_rtc_version: DetectRTC.version,
+        // is_webrtc_supported: DetectRTC.isWebRTCSupported,
+        join_data_time: getDataTimeString(),
+        peer_id: socket.id,
+        peer_name: peer_name,
+        peer_audio: isAudioAllowed,
+        peer_video: isVideoAllowed,
+        peer_screen: isScreenAllowed,
+        peer_video_privacy: isVideoPrivacyActive,
+        peer_hand: false,
         is_desktop_device: !DetectRTC.isMobileDevice && !isTabletDevice && !isIPadDevice,
         is_mobile_device: DetectRTC.isMobileDevice,
         is_tablet_device: isTabletDevice,
@@ -433,13 +442,14 @@ function getPeerInfo() {
         os_version: DetectRTC.osVersion,
         browser_name: DetectRTC.browser.name,
         browser_version: DetectRTC.browser.version,
-        peer_id: socket.id,
-        peer_name: peer_name,
-        peer_audio: isAudioAllowed,
-        peer_video: isVideoAllowed,
-        peer_screen: isScreenAllowed,
-        peer_video_privacy: isVideoPrivacyActive,
-        peer_hand: false,
+        // peer_id: socket.id,
+        // peer_name: peer_name,
+        // peer_audio: isAudioAllowed,
+        // peer_video: isVideoAllowed,
+        // peer_screen: isScreenAllowed,
+        // peer_video_privacy: isVideoPrivacyActive,
+        // peer_hand: false,
+        user_agent: userAgent,
     };
 }
 
@@ -1073,6 +1083,9 @@ function handleButtons() {
     participantsCloseBtn.onclick = () => {
         toggleParticipants();
     };
+      participantsSaveBtn.onclick = () => {
+        saveRoomPeers();
+      };
     lockRoomButton.onclick = () => {
         rc.roomAction('lock');
     };
@@ -1560,6 +1573,24 @@ function saveDataToFile(dataURL, fileName) {
     }, 100);
 }
 
+function saveObjToJsonFile(dataObj, name) {
+  console.log("Save data", { dataObj: dataObj, name: name });
+  const dataTime = getDataTimeString();
+  let a = document.createElement("a");
+  a.href =
+    "data:text/json;charset=utf-8," +
+    encodeURIComponent(JSON.stringify(dataObj, null, 1));
+  a.download = `${dataTime}-${name}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 100);
+  sound("download");
+}
+
+
 function getDataTimeString() {
     const d = new Date();
     const date = d.toISOString().split('T')[0];
@@ -2041,22 +2072,37 @@ function toggleParticipants() {
     isParticipantsListOpen = !isParticipantsListOpen;
 }
 
-async function getRoomParticipants(refresh = false) {
-    let room_info = await rc.getRoomInfo();
-    let peers = new Map(JSON.parse(room_info.peers));
-    let table = await getParticipantsTable(peers);
-
-    participantsCount = peers.size;
-    roomParticipants.innerHTML = table;
-    refreshParticipantsCount(participantsCount, false);
-
-    if (!refresh) {
-        toggleParticipants();
-        sound('open');
+// async function getRoomParticipants(refresh = false) {
+    async function getRoomPeers() {
+      let room_info = await rc.getRoomInfo();
+      //   let peers = new Map(JSON.parse(room_info.peers));
+      return new Map(JSON.parse(room_info.peers));
     }
 
-    setParticipantsTippy(peers);
-}
+    async function saveRoomPeers() {
+      const peers = await getRoomPeers();
+      let peersToSave = [];
+      for (let peer of Array.from(peers.keys())) {
+        peersToSave.push(peers.get(peer).peer_info);
+      }
+      saveObjToJsonFile(peersToSave, "PARTICIPANTS");
+    }
+
+    async function getRoomParticipants(refresh = false) {
+      let peers = await getRoomPeers();
+      let table = await getParticipantsTable(peers);
+
+      participantsCount = peers.size;
+      roomParticipants.innerHTML = table;
+      refreshParticipantsCount(participantsCount, false);
+
+      if (!refresh) {
+        toggleParticipants();
+        sound("open");
+      }
+
+      setParticipantsTippy(peers);
+    }
 
 async function getParticipantsTable(peers) {
     let table = `
