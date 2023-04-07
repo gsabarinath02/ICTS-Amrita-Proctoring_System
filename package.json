@@ -44,6 +44,7 @@
         "httpolyglot": "0.1.2",
         "mediasoup": "3.11.21",
         "mediasoup-client": "3.6.83",
+        "mongodb": "^5.2.0",
         "ngrok": "^4.3.3",
         "qs": "6.11.1",
         "socket.io": "4.6.1",
