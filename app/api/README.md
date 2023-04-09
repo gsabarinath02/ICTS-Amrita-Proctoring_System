@@ -2,7 +2,7 @@
 
 ## Create a meeting
 
-Create a meeting with a `HTTP request` containing the `API_KEY` sent to MiroTalk’s server. The response contains a `meeting` URL that can be `embedded` in your client within an `iframe`.
+Create a meeting with a `HTTP request` containing the `API_KEY` sent to AmritaShare’s server. The response contains a `meeting` URL that can be `embedded` in your client within an `iframe`.
 
 ```bash
 # js
@@ -29,7 +29,7 @@ Embedding a meeting into a `service` or `app` requires using an `iframe` with th
 ```html
 <iframe
     allow="camera; microphone; display-capture; fullscreen; clipboard-read; clipboard-write; autoplay"
-    src="https://sfu.mirotalk.com/join/room_name"
+    src="https://sfu.AmritaShare.com/join/room_name"
     style="height: 100%; width: 100%; border: 0px;"
 ></iframe>
 ```
@@ -41,7 +41,7 @@ Develop your `website` or `application`, and bring `video meetings` in with a si
 ```html
 <iframe
     allow="camera; microphone; display-capture; fullscreen; clipboard-read; clipboard-write; autoplay"
-    src="https://sfu.mirotalk.com/newroom"
+    src="https://sfu.AmritaShare.com/newroom"
     style="height: 100%; width: 100%; border: 0px;"
 ></iframe>
 ```

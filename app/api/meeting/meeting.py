@@ -3,9 +3,9 @@
 import requests
 import json
 
-API_KEY = "mirotalksfu_default_secret"
-MIROTALK_URL = "https://sfu.mirotalk.com/api/v1/meeting"
-# MIROTALK_URL = "http://localhost:3010/api/v1/join"
+API_KEY = "AmritaShare_default_secret"
+AmritaShare_URL = "https://sfu.AmritaShare.com/api/v1/meeting"
+# AmritaShare_URL = "http://localhost:3010/api/v1/join"
 
 headers = {
     "authorization": API_KEY,
@@ -13,7 +13,7 @@ headers = {
 }
 
 response = requests.post(
-    MIROTALK_URL,
+    AmritaShare_URL,
     headers=headers
 )
 

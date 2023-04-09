@@ -24,8 +24,8 @@ If you want to expose Amrita-Share from your `Local PC` to outside in `HTTPS`, y
 
 | Name            | Protocol    | Port Wan    | Port Lan    | IP Destination    |
 | --------------- | ----------- | ----------- | ----------- | ----------------- |
-| `MiroTalkSfu` | `TCP/UDP` | 40000:40100 | 40000:40100 | `Your Local IP` |
-| `MiroTalkSfu` | `TCP`     | 3010        | 3010        | `Your Local IP` |
+| `AmritaShare` | `TCP/UDP` | 40000:40100 | 40000:40100 | `Your Local IP` |
+| `AmritaShare` | `TCP`     | 3010        | 3010        | `Your Local IP` |
 
 Make sure your firewall not blocking rtcPorts `range: 40000:40100`
 
@@ -41,4 +41,4 @@ So open it in your browser, join in the room, share it to whom you want and wait
 
 ## Support
 
-[![](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/mirotalk/mirotalk-sfu-free-video-calls-messaging-screen-sharing-recording)
+[![](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/AmritaShare/AmritaShare-sfu-free-video-calls-messaging-screen-sharing-recording)

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-API_KEY="mirotalksfu_default_secret"
-MIROTALK_URL="https://sfu.mirotalk.com/api/v1/meeting"
-# MIROTALK_URL="http://localhost:3010/api/v1/join"
+API_KEY="AmritaShare_default_secret"
+AmritaShare_URL="https://sfu.AmritaShare.com/api/v1/meeting"
+# AmritaShare_URL="http://localhost:3010/api/v1/join"
 
-curl $MIROTALK_URL \
+curl $AmritaShare_URL \
     --header "authorization: $API_KEY" \
     --header "Content-Type: application/json" \
     --request POST

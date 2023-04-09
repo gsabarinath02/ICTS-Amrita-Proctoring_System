@@ -2,9 +2,9 @@
 import requests
 import json
 
-API_KEY = "mirotalksfu_default_secret"
-MIROTALK_URL = "https://sfu.mirotalk.com/api/v1/join"
-# MIROTALK_URL = "http://localhost:3010/api/v1/join"
+API_KEY = "AmritaShare_default_secret"
+AmritaShare_URL = "https://sfu.AmritaShare.com/api/v1/join"
+# AmritaShare_URL = "http://localhost:3010/api/v1/join"
 
 headers = {
     "authorization": API_KEY,
@@ -14,7 +14,7 @@ headers = {
 data = {
     "room": "test",
     "password": "false",
-    "name": "mirotalksfu",
+    "name": "AmritaShare",
     "audio": "true",
     "video": "true",
     "screen": "true",
@@ -22,7 +22,7 @@ data = {
 }
 
 response = requests.post(
-    MIROTALK_URL,
+    AmritaShare_URL,
     headers=headers,
     json=data,
 )

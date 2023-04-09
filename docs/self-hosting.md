@@ -39,9 +39,9 @@ $ npm install -g npm@latest
 
 ```bash
 # Clone this repo
-$ git clone https://github.com/miroslavpejic85/mirotalksfu.git
-# Go to to dir mirotalksfu
-$ cd mirotalksfu
+$ git clone https://github.com/miroslavpejic85/AmritaShare.git
+# Go to to dir AmritaShare
+$ cd AmritaShare
 # Copy app/src/config.template.js in app/src/config.js
 $ cp app/src/config.template.js app/src/config.js
 ```
@@ -99,7 +99,7 @@ $ pm2 startup
 
 If you want to use `Docker`
 
-Repo: https://hub.docker.com/r/mirotalk/sfu
+Repo: https://hub.docker.com/r/AmritaShare/sfu
 
 ```bash
 # Install docker and docker-compose
@@ -111,7 +111,7 @@ $ cp app/src/config.template.js app/src/config.js
 # Copy docker-compose.template.yml in docker-compose.yml and edit it if needed
 $ cp docker-compose.template.yml docker-compose.yml
 # Get official image from Docker Hub
-$ docker pull mirotalk/sfu:latest
+$ docker pull AmritaShare/sfu:latest
 # Create and start containers as deamon
 $ docker-compose up -d
 ```
@@ -169,7 +169,7 @@ $ sudo vim /etc/nginx/sites-enabled/default
 Paste this:
 
 ```bash
-# MiroTalk SFU - HTTPS — proxy all requests to the Node app
+# AmritaShare SFU - HTTPS — proxy all requests to the Node app
 server {
 	# Enable HTTP/2
 	listen 443 ssl http2;
@@ -206,13 +206,13 @@ $ sudo certbot renew --dry-run
 $ sudo certbot certificates
 ```
 
-Check Your MiroTalk SFU instance: https://your.domain.name/
+Check Your AmritaShare SFU instance: https://your.domain.name/
 
 ---
 
 ## Update script
 
-In order to have always Your MiroTalk SFU updated to latest, we going to create a script
+In order to have always Your AmritaShare SFU updated to latest, we going to create a script
 
 ```bash
 cd
@@ -227,7 +227,7 @@ If you use `PM2`, paste this:
 ```bash
 #!/bin/bash
 
-cd mirotalksfu
+cd AmritaShare
 git pull
 pm2 stop app/src/Server.js
 sudo npm install
@@ -241,9 +241,9 @@ If you use `Docker`, paste this:
 ```bash
 #!/bin/bash
 
-cd mirotalksfu
+cd AmritaShare
 git pull
-docker pull mirotalk/sfu:latest
+docker pull AmritaShare/sfu:latest
 docker-compose up -d
 docker images |grep '<none>' |awk '{print $3}' |xargs docker rmi
 ```
@@ -256,9 +256,9 @@ Make the script executable
 $ chmod +x sfuUpdate.sh
 ```
 
-Follow the commits of the MiroTalk SFU project [here](https://github.com/miroslavpejic85/mirotalksfu/commits/main)
+Follow the commits of the AmritaShare SFU project [here](https://github.com/miroslavpejic85/AmritaShare/commits/main)
 
-To update your instance of MiroTalk SFU at latest commit, execute:
+To update your instance of AmritaShare SFU at latest commit, execute:
 
 ```bash
 ./sfuUpdate.sh
@@ -268,4 +268,4 @@ To update your instance of MiroTalk SFU at latest commit, execute:
 
 ## Support
 
-[![](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/mirotalk/mirotalk-sfu-free-video-calls-messaging-screen-sharing-recording)
+[![](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/AmritaShare/AmritaShare-sfu-free-video-calls-messaging-screen-sharing-recording)

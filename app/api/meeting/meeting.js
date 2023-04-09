@@ -3,11 +3,11 @@
 const fetch = require('node-fetch');
 
 const API_KEY = 'amrita-share_default_secret';
-const MIROTALK_URL = 'https://sfu.amrita-share.com/api/v1/meeting';
-// const MIROTALK_URL = 'http://localhost:3010/api/v1/join';
+const AmritaShare_URL = 'https://sfu.amrita-share.com/api/v1/meeting';
+// const AmritaShare_URL = 'http://localhost:3010/api/v1/join';
 
 function getResponse() {
-    return fetch(MIROTALK_URL, {
+    return fetch(AmritaShare_URL, {
         method: 'POST',
         headers: {
             authorization: API_KEY,

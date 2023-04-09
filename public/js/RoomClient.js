@@ -39,8 +39,8 @@ const icons = {
 };
 
 const image = {
-  about: "../images/mirotalksfu-logo.png",
-  avatar: "../images/mirotalksfu-logo.png",
+  about: "../images/AmritaShare-logo.png",
+  avatar: "../images/AmritaShare-logo.png",
   audio: "../images/audio.gif",
   poster: "../images/loader1.gif",
   delete: "../images/delete.png",
@@ -3406,7 +3406,7 @@ class RoomClient {
     Swal.fire({
       allowOutsideClick: false,
       background: swalBackground,
-      imageAlt: "mirotalksfu-file-sharing",
+      imageAlt: "AmritaShare-file-sharing",
       imageUrl: image.share,
       position: "center",
       title: "Share file",
@@ -3657,7 +3657,7 @@ class RoomClient {
             " size " +
             this.bytesToSize(this.incomingFileInfo.fileSize),
           imageUrl: e.target.result,
-          imageAlt: "mirotalksfu-file-img-download",
+          imageAlt: "AmritaShare-file-img-download",
           showDenyButton: true,
           confirmButtonText: `Save`,
           denyButtonText: `Cancel`,

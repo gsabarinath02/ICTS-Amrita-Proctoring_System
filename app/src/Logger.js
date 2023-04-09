@@ -11,7 +11,7 @@ const options = {
     colors: true,
 };
 module.exports = class Logger {
-    constructor(appName = 'miroTalkSfu', debugOn = true) {
+    constructor(appName = 'AmritaShare', debugOn = true) {
         this.appName = colors.yellow(appName);
         this.debugOn = debugOn;
         this.timeStart = Date.now();
