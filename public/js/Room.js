@@ -16,7 +16,7 @@ const surveyActive = true;
 
 const url = {
     ipLookup: 'https://extreme-ip-lookup.com/json/?key=demo2',
-    survey: '#',
+    survey: '/newroom',
 };
 
 const _PEER = {
@@ -1507,11 +1507,12 @@ function handleRoomClientEvents() {
             console.log('Room Client save recording before to exit');
             rc.stopRecording();
         }
-        if (surveyActive) {
-            leaveFeedback();
-        } else {
-            openURL('/newroom');
-        }
+         if (surveyActive) {
+           leaveFeedback();
+         } else {
+           openURL("/newroom");
+         }
+        // openURL("/newroom");
     });
 }
 

@@ -3325,7 +3325,9 @@ class RoomClient {
 
   stopRecording() {
     this._isRecording = false;
-    this.mediaRecorder.stop();
+    if (this.mediaRecorder){
+      this.mediaRecorder.stop();
+    }
     if (this.recScreenStream) {
       this.recScreenStream.getTracks().forEach((track) => {
         if (track.kind === "video") track.stop();
