@@ -1512,7 +1512,7 @@ function handleRoomClientEvents() {
          } else {
            openURL("/newroom");
          }
-        // openURL("/newroom");
+        
     });
 }
 
