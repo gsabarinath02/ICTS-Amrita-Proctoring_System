@@ -523,14 +523,16 @@ function startServer() {
             const words = data.split('|');
             let cmd = words[0];
             switch (cmd) {
-                case 'privacy':
-                    roomList
-                        .get(socket.room_id)
-                        .getPeers()
-                        .get(socket.id)
-                        .updatePeerInfo({ type: cmd, status: words[2] == 'true' });
-                    break;
-                //...
+              case "privacy":
+                roomList
+                  .get(socket.room_id)
+                  .getPeers()
+                  .get(socket.id)
+                  .updatePeerInfo({ type: cmd, status: words[2] == "true" });
+                break;
+              default:
+                break;
+              //...
             }
 
             roomList.get(socket.room_id).broadCast(socket.id, 'cmd', data);

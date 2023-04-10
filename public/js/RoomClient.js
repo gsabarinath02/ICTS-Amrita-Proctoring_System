@@ -256,7 +256,7 @@ class RoomClient {
         room_id,
       })
       .catch((err) => {
-        console.log("Create room error:", err);
+        console.log("Create room :", err);
       });
   }
 
@@ -278,6 +278,16 @@ class RoomClient {
               "00-WARNING ----> Room Lobby Enabled, Wait to confirm my join"
             );
             return this.waitJoinConfirm();
+          }
+          const peers = new Map(JSON.parse(room.peers));
+          for (let peer of Array.from(peers.keys()).filter(
+            (id) => id !== this.peer_id
+          )) {
+            let peer_info = peers.get(peer).peer_info;
+            if (peer_info.peer_name == this.peer_name) {
+              console.log("00-WARNING ----> Username already in use");
+              return this.userNameAlreadyInRoom();
+            }
           }
           await this.joinAllowed(room);
         }.bind(this)
@@ -672,6 +682,35 @@ class RoomClient {
         this.exit(true);
       }.bind(this)
     );
+  }
+
+  // ####################################################
+  // CHECK USER
+  // ####################################################
+
+  async userNameAlreadyInRoom() {
+    this.sound("alert");
+    Swal.fire({
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      background: swalBackground,
+      imageUrl: image.user,
+      position: "center",
+      title: "Username",
+      html: `The Username is already in use. <br/> Please try with another one`,
+      showDenyButton: false,
+      confirmButtonText: `OK`,
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        openURL((window.location.href = "/join/" + this.room_id));
+      }
+    });
   }
 
   // ####################################################
@@ -3153,7 +3192,7 @@ class RoomClient {
     // }, 100);
 
     // this.sound("download");
-     saveObjToJsonFile(this.chatMessages, "CHAT");
+    saveObjToJsonFile(this.chatMessages, "CHAT");
   }
 
   // ####################################################
@@ -3286,7 +3325,7 @@ class RoomClient {
       // const newDate = new Date();
       // const date = newDate.toISOString().split("T")[0];
       // const time = newDate.toTimeString().split(" ")[0];
-       const dateTime = getDataTimeString();
+      const dateTime = getDataTimeString();
 
       const type = recordedBlobs[0].type.includes("mp4") ? "mp4" : "webm";
       const blob = new Blob(recordedBlobs, { type: "video/" + type });
@@ -3325,7 +3364,7 @@ class RoomClient {
 
   stopRecording() {
     this._isRecording = false;
-    if (this.mediaRecorder){
+    if (this.mediaRecorder) {
       this.mediaRecorder.stop();
     }
     if (this.recScreenStream) {
@@ -4801,12 +4840,12 @@ class RoomClient {
               "peer_name",
               "peer_audio",
               "peer_video",
-              'peer_video_privacy',
+              "peer_video_privacy",
               "peer_screen",
               "peer_hand",
               "is_desktop_device",
               "is_mobile_device",
-              'is_tablet_device',
+              "is_tablet_device",
               "is_ipad_pro_device",
               "os_name",
               "os_version",
