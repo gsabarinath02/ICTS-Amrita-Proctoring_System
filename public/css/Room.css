@@ -82,7 +82,8 @@ body {
     height: 100%;
     overflow: hidden;
     /* background: var(--body-bg); */
-    background: url('../images/background-new.png');
+    background: url('../images/AmritaBackground.png') no-repeat center center fixed;
+    background-size: cover;
 }
 
 /*--------------------------------------------------------------

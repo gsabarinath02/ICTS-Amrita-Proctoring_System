@@ -50,6 +50,7 @@ const image = {
   users: "../images/participants.png",
   user: "../images/participant.png",
   username: "../images/user.png",
+  Error : "../images/error.png",
   videoShare: "../images/video-share.png",
   message: "../images/message.png",
   share: "../images/share.png",
@@ -285,7 +286,7 @@ class RoomClient {
           )) {
             let peer_info = peers.get(peer).peer_info;
             if (peer_info.peer_name == this.peer_name) {
-              console.log("00-WARNING ----> Username already in use");
+              console.log("00-WARNING ----> Oops!! Username already in use");
               return this.userNameAlreadyInRoom();
             }
           }
@@ -694,10 +695,10 @@ class RoomClient {
       allowOutsideClick: false,
       allowEscapeKey: false,
       background: swalBackground,
-      imageUrl: image.user,
+      imageUrl: image.Error,
       position: "center",
-      title: "Username",
-      html: `The Username is already in use. <br/> Please try with another one`,
+      title: "OOPS!",
+      html: `User already in meeting.<br/> No duplicate Entries allowed`,
       showDenyButton: false,
       confirmButtonText: `OK`,
       showClass: {
