@@ -423,33 +423,36 @@ function getRoomPassword() {
 
 function getPeerInfo() {
     peer_info = {
-        // user_agent: userAgent,
-        // detect_rtc_version: DetectRTC.version,
-        // is_webrtc_supported: DetectRTC.isWebRTCSupported,
-        join_data_time: getDataTimeString(),
-        peer_id: socket.id,
-        peer_name: peer_name,
-        peer_audio: isAudioAllowed,
-        peer_video: isVideoAllowed,
-        peer_screen: isScreenAllowed,
-        peer_video_privacy: isVideoPrivacyActive,
-        peer_hand: false,
-        is_desktop_device: !DetectRTC.isMobileDevice && !isTabletDevice && !isIPadDevice,
-        is_mobile_device: DetectRTC.isMobileDevice,
-        is_tablet_device: isTabletDevice,
-        is_ipad_pro_device: isIPadDevice,
-        os_name: DetectRTC.osName,
-        os_version: DetectRTC.osVersion,
-        browser_name: DetectRTC.browser.name,
-        browser_version: DetectRTC.browser.version,
-        // peer_id: socket.id,
-        // peer_name: peer_name,
-        // peer_audio: isAudioAllowed,
-        // peer_video: isVideoAllowed,
-        // peer_screen: isScreenAllowed,
-        // peer_video_privacy: isVideoPrivacyActive,
-        // peer_hand: false,
-        user_agent: userAgent,
+      // user_agent: userAgent,
+      // detect_rtc_version: DetectRTC.version,
+      // is_webrtc_supported: DetectRTC.isWebRTCSupported,
+      join_data_time: getDataTimeString(),
+      peer_uuid: getUUID(),
+      peer_id: socket.id,
+      peer_name: peer_name,
+      peer_presenter: isPresenter,
+      peer_audio: isAudioAllowed,
+      peer_video: isVideoAllowed,
+      peer_screen: isScreenAllowed,
+      peer_video_privacy: isVideoPrivacyActive,
+      peer_hand: false,
+      is_desktop_device:
+        !DetectRTC.isMobileDevice && !isTabletDevice && !isIPadDevice,
+      is_mobile_device: DetectRTC.isMobileDevice,
+      is_tablet_device: isTabletDevice,
+      is_ipad_pro_device: isIPadDevice,
+      os_name: DetectRTC.osName,
+      os_version: DetectRTC.osVersion,
+      browser_name: DetectRTC.browser.name,
+      browser_version: DetectRTC.browser.version,
+      // peer_id: socket.id,
+      // peer_name: peer_name,
+      // peer_audio: isAudioAllowed,
+      // peer_video: isVideoAllowed,
+      // peer_screen: isScreenAllowed,
+      // peer_video_privacy: isVideoPrivacyActive,
+      // peer_hand: false,
+      user_agent: userAgent,
     };
 }
 
@@ -1598,6 +1601,21 @@ function getDataTimeString() {
     const time = d.toTimeString().split(' ')[0];
     return `${date}-${time}`;
 }
+
+function getUUID() {
+  const uuid4 = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+    (
+      c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+    ).toString(16)
+  );
+  if (window.localStorage.uuid) {
+    return window.localStorage.uuid;
+  }
+  window.localStorage.uuid = uuid4;
+  return uuid4;
+}
+
 
 function showButtons() {
     if (

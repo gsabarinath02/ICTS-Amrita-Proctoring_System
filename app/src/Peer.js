@@ -8,6 +8,7 @@ module.exports = class Peer {
         this.id = socket_id;
         this.peer_info = data.peer_info;
         this.peer_name = data.peer_info.peer_name;
+        this.peer_presenter = data.peer_info.peer_presenter;
         this.peer_audio = data.peer_info.peer_audio;
         this.peer_video = data.peer_info.peer_video;
         this.peer_video_privacy = data.peer_video_privacy;
@@ -24,32 +25,38 @@ module.exports = class Peer {
     updatePeerInfo(data) {
         log.debug('Update peer info', data);
         switch (data.type) {
-            case 'audio':
-            case 'audioType':
-                this.peer_info.peer_audio = data.status;
-                this.peer_audio = data.status;
-                break;
-            case 'video':
-            case 'videoType':
-                this.peer_info.peer_video = data.status;
-                this.peer_video = data.status;
-                if (data.status == false) {
-                    this.peer_info.peer_video_privacy = data.status;
-                    this.peer_video_privacy = data.status;
-                }
-                break;
-            case 'screen':
-            case 'screenType':
-                this.peer_info.peer_screen = data.status;
-                break;
-            case 'hand':
-                this.peer_info.peer_hand = data.status;
-                this.peer_hand = data.status;
-                break;
-            case 'privacy':
-                this.peer_info.peer_video_privacy = data.status;
-                this.peer_video_privacy = data.status;
-                break;
+          case "audio":
+          case "audioType":
+            this.peer_info.peer_audio = data.status;
+            this.peer_audio = data.status;
+            break;
+          case "video":
+          case "videoType":
+            this.peer_info.peer_video = data.status;
+            this.peer_video = data.status;
+            if (data.status == false) {
+              this.peer_info.peer_video_privacy = data.status;
+              this.peer_video_privacy = data.status;
+            }
+            break;
+          case "screen":
+          case "screenType":
+            this.peer_info.peer_screen = data.status;
+            break;
+          case "hand":
+            this.peer_info.peer_hand = data.status;
+            this.peer_hand = data.status;
+            break;
+          case "privacy":
+            this.peer_info.peer_video_privacy = data.status;
+            this.peer_video_privacy = data.status;
+            break;
+          case "presenter":
+            this.peer_info.peer_presenter = data.status;
+            this.peer_presenter = data.status;
+            break;
+          default:
+            break;
         }
     }
 
