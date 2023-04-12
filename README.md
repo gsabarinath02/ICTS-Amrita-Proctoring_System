@@ -105,7 +105,7 @@ $ https://github.com/gsabarinath02/ICTS-Amrita-Proctoring_System.git
 # go to ICTS-Amrita-Proctoring_System dir
 $ cd ICTS-Amrita-Proctoring_System
 # copy .env.template to .env (edit it according to your needs)
-$ cp .env.template .env
+$ cp app/src/config.template.js app/src/config.js
 # install dependencies
 $ npm install
 # start the server
