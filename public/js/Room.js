@@ -2259,7 +2259,8 @@ function refreshParticipantsCount(count, adapt = true) {
 }
 
 function getParticipantAvatar(peerName) {
-    return cfg.msgAvatar + '?name=' + peerName + '&size=32' + '&background=random&rounded=true';
+    // return cfg.msgAvatar + '?name=' + peerName + '&size=32' + '&background=random&rounded=true';
+    return rc.genAvatarSvg(peerName, 32);
 }
 
 // ####################################################

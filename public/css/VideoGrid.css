@@ -66,6 +66,15 @@
     background: rgba(0, 0, 0, 0.4);
 }
 
+.videoAvatarImage {
+    z-index: 7;
+    position: absolute;
+    display: none;
+    width: var(--vmi-wh);
+    height: var(--vmi-wh);
+    border-radius: 50%;
+}
+
 .audio {
     position: absolute;
     right: 0;
@@ -106,12 +115,12 @@
     background: rgba(0, 0, 0, 0.1);
 }
 
-#videoMediaContainer img {
+/* #videoMediaContainer img {
     position: absolute;
     display: none;
     width: var(--vmi-wh);
     height: var(--vmi-wh);
-}
+} */
 
 .videoMenuBar {
     z-index: 2;

@@ -1,8 +1,9 @@
 "use strict";
 
 const cfg = {
-  useAvatarApi: true,
-  msgAvatar: "https://eu.ui-avatars.com/api",
+  // useAvatarApi: true,
+  // msgAvatar: "https://eu.ui-avatars.com/api",
+  useAvatarSvg: true,
 };
 
 const html = {
@@ -303,10 +304,10 @@ class RoomClient {
     await this.handleRoomInfo(room);
     const data = await this.socket.request("getRouterRtpCapabilities");
     this.device = await this.loadDevice(data);
-   console.log(
-     "07.3 ----> Get Router Rtp Capabilities codecs: ",
-     this.device.rtpCapabilities.codecs
-   );
+    console.log(
+      "07.3 ----> Get Router Rtp Capabilities codecs: ",
+      this.device.rtpCapabilities.codecs
+    );
     await this.initTransports(this.device);
     await this.startLocalMedia();
     this.socket.emit("getProducers");
@@ -338,7 +339,7 @@ class RoomClient {
     }
     this.refreshParticipantsCount();
     // console.log("06.2 Participants Count ---->", participantsCount);
-      console.log("07.2 Participants Count ---->", participantsCount);
+    console.log("07.2 Participants Count ---->", participantsCount);
 
     // notify && participantsCount == 1 ? shareRoom() : sound('joined');
     if (notify && participantsCount == 1) {
@@ -1988,7 +1989,8 @@ class RoomClient {
       ko.className = html.kickOut;
     }
     i = document.createElement("img");
-    i.className = "center"; // pulsate
+    // i.className = "center"; // pulsate
+    i.className = "videoAvatarImage center"; // pulsate
     i.id = peer_id + "__img";
     p = document.createElement("p");
     p.id = peer_id + "__name";
@@ -2208,20 +2210,66 @@ class RoomClient {
 
   setVideoAvatarImgName(elemId, peer_name) {
     let elem = this.getId(elemId);
-    if (cfg.useAvatarApi) {
-      let avatarImgSize = 250;
-      elem.setAttribute(
-        "src",
-        cfg.msgAvatar +
-          "?name=" +
-          peer_name +
-          "&size=" +
-          avatarImgSize +
-          "&background=random&rounded=true"
-      );
+    // if (cfg.useAvatarApi) {
+    //   let avatarImgSize = 250;
+    //   elem.setAttribute(
+    //     "src",
+    //     cfg.msgAvatar +
+    //       "?name=" +
+    //       peer_name +
+    //       "&size=" +
+    //       avatarImgSize +
+    //       "&background=random&rounded=true"
+    //   );
+    if (cfg.useAvatarSvg) {
+      elem.setAttribute("src", this.genAvatarSvg(peer_name, 250));
     } else {
       elem.setAttribute("src", image.avatar);
     }
+  }
+
+  genAvatarSvg(peerName, avatarImgSize) {
+    const charCodeRed = peerName.charCodeAt(0);
+    const charCodeGreen = peerName.charCodeAt(1) || charCodeRed;
+    const red = Math.pow(charCodeRed, 7) % 200;
+    const green = Math.pow(charCodeGreen, 7) % 200;
+    const blue = (red + green) % 200;
+    const bgColor = `rgb(${red}, ${green}, ${blue})`;
+    const textColor = "#ffffff";
+    const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" 
+        xmlns:xlink="http://www.w3.org/1999/xlink" 
+        width="${avatarImgSize}px" 
+        height="${avatarImgSize}px" 
+        viewBox="0 0 ${avatarImgSize} ${avatarImgSize}" 
+        version="1.1">
+            <circle 
+                fill="${bgColor}" 
+                width="${avatarImgSize}" 
+                height="${avatarImgSize}" 
+                cx="${avatarImgSize / 2}" 
+                cy="${avatarImgSize / 2}" 
+                r="${avatarImgSize / 2}"
+            />
+            <text 
+                x="50%" 
+                y="50%" 
+                style="color:${textColor}; 
+                line-height:1; 
+                font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Fira Sans, Droid Sans, Helvetica Neue, sans-serif"
+                alignment-baseline="middle" 
+                text-anchor="middle" 
+                font-size="${Math.round(avatarImgSize * 0.4)}" 
+                font-weight="normal" 
+                dy=".1em" 
+                dominant-baseline="middle" 
+                fill="${textColor}">${peerName.substring(0, 2).toUpperCase()}
+            </text>
+        </svg>`;
+    return (
+      "data:image/svg+xml," +
+      svg.replace(/#/g, "%23").replace(/"/g, "'").replace(/&/g, "&amp;")
+    );
   }
 
   setIsAudio(peer_id, status) {
@@ -2956,12 +3004,13 @@ class RoomClient {
   }
 
   setMsgAvatar(avatar, peerName) {
-    let avatarImg =
-      cfg.msgAvatar +
-      "?name=" +
-      peerName +
-      "&size=32" +
-      "&background=random&rounded=true";
+    // let avatarImg =
+    //   cfg.msgAvatar +
+    //   "?name=" +
+    //   peerName +
+    //   "&size=32" +
+    //   "&background=random&rounded=true";
+    let avatarImg = this.genAvatarSvg(peerName, 32);
     avatar === "left"
       ? (this.leftMsgAvatar = avatarImg)
       : (this.rightMsgAvatar = avatarImg);
@@ -2975,7 +3024,7 @@ class RoomClient {
     let message = toId == "all" ? msg : msg + replyMsg;
     let msgHTML = `
         <div id="msg-${chatMessagesId}" class="msg ${side}-msg">
-            <div class="msg-img" style="background-image: url('${img}')"></div>
+            <img class="msg-img" src="${img}" />
             <div class=${msgBubble}>
                 <div class="msg-info">
                     <div class="msg-info-name">${fromName}</div>
