@@ -20,7 +20,7 @@ const BUTTONS = {
     participantsButton: true,
     whiteboardButton: true,
     settingsButton: true,
-    aboutButton: false, // Please keep me always visible, thank you!
+    aboutButton: false, 
     exitButton: true,
   },
   settings: {
@@ -71,6 +71,11 @@ function handleRules(isPresenter) {
     console.log('06.1 ----> IsPresenter: ' + isPresenter);
     if (!isRulesActive) return;
     if (!isPresenter) {
+        BUTTONS.main.settingsButton = false;
+        BUTTONS.main.shareButton = false;
+        BUTTONS.main.whiteboardButton = false;
+        BUTTONS.main.participantsButton = false;
+
         BUTTONS.participantsList.saveInfoButton = false;
         BUTTONS.settings.lockRoomButton = false;
         BUTTONS.settings.unlockRoomButton = false;
@@ -81,7 +86,12 @@ function handleRules(isPresenter) {
         BUTTONS.consumerVideo.muteAudioButton = false;
         BUTTONS.consumerVideo.muteVideoButton = false;
         //...
-    } else {
+    } else {   
+        BUTTONS.main.settingsButton = true;
+        BUTTONS.main.shareButton = true;
+        BUTTONS.main.whiteboardButton = true;
+        BUTTONS.main.participantsButton = true;
+        
         BUTTONS.participantsList.saveInfoButton = true;
         BUTTONS.settings.lockRoomButton = !isRoomLocked;
         BUTTONS.settings.unlockRoomButton = isRoomLocked;
@@ -100,6 +110,10 @@ function handleRules(isPresenter) {
     BUTTONS.participantsList.saveInfoButton
       ? show(participantsSaveBtn)
       : hide(participantsSaveBtn);
+    BUTTONS.main.shareButton ? show(shareButton) : hide(shareButton);
+    BUTTONS.main.whiteboardButton ? show(whiteboardButton) : hide(whiteboardButton);
+    BUTTONS.main.settingsButton ? show(settingsButton) : hide(settingsButton);
+    BUTTONS.main.participantsButton ? show(participantsButton) : hide(participantsButton);
     //...
 }
 
