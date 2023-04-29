@@ -27,7 +27,7 @@ module.exports = {
         In order to protect your host set 
         hostProtected to true and set your own Username and Password
     */
-    hostProtected: true,
+    hostProtected: false,
     hostUsername: 'admin',
     hostPassword: 'admin',
     // app listen on
