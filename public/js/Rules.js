@@ -22,6 +22,7 @@ const BUTTONS = {
     settingsButton: true,
     aboutButton: false, 
     exitButton: true,
+    raiseHand: true,
   },
   settings: {
     lockRoomButton: true,
@@ -33,26 +34,26 @@ const BUTTONS = {
     fullScreenButton: true,
     snapShotButton: true,
     muteAudioButton: true,
-    videoPrivacyButton: true,
+    videoPrivacyButton: false,
   },
   consumerVideo: {
     fullScreenButton: true,
-    snapShotButton: true,
-    sendMessageButton: true,
-    sendFileButton: true,
-    sendVideoButton: true,
-    muteVideoButton: true,
-    muteAudioButton: true,
+    snapShotButton: false,
+    sendMessageButton: false,
+    sendFileButton:false,
+    sendVideoButton: false,
+    muteVideoButton: false,
+    muteAudioButton: false,
     audioVolumeInput: true,
-    ejectButton: true,
+    ejectButton: false,
   },
   videoOff: {
-    sendMessageButton: true,
-    sendFileButton: true,
-    sendVideoButton: true,
-    muteAudioButton: true,
-    audioVolumeInput: true,
-    ejectButton: true,
+    sendMessageButton: false,
+    sendFileButton: false,
+    sendVideoButton: false,
+    muteAudioButton: false,
+    audioVolumeInput: false,
+    ejectButton: false,
   },
   chat: {
     chatSaveButton: true,
@@ -75,6 +76,7 @@ function handleRules(isPresenter) {
         BUTTONS.main.shareButton = false;
         BUTTONS.main.whiteboardButton = false;
         BUTTONS.main.participantsButton = false;
+        BUTTONS.main.hideMeButton = false;
 
         BUTTONS.participantsList.saveInfoButton = false;
         BUTTONS.settings.lockRoomButton = false;
@@ -91,7 +93,8 @@ function handleRules(isPresenter) {
         BUTTONS.main.shareButton = true;
         BUTTONS.main.whiteboardButton = true;
         BUTTONS.main.participantsButton = true;
-        
+        BUTTONS.main.hideMeButton = true;
+
         BUTTONS.participantsList.saveInfoButton = true;
         BUTTONS.settings.lockRoomButton = !isRoomLocked;
         BUTTONS.settings.unlockRoomButton = isRoomLocked;
@@ -99,22 +102,18 @@ function handleRules(isPresenter) {
         BUTTONS.videoOff.muteAudioButton = true;
         BUTTONS.videoOff.ejectButton = true;
         BUTTONS.consumerVideo.ejectButton = true;
-        BUTTONS.consumerVideo.muteAudioButton = true;
         BUTTONS.consumerVideo.muteVideoButton = true;
         //...
     }
     // main. settings.
+    BUTTONS.main.hideMeButton ? show(hideMeButton) : hide(hideMeButton);
     BUTTONS.settings.lockRoomButton ? show(lockRoomButton) : hide(lockRoomButton);
     BUTTONS.settings.unlockRoomButton ? show(unlockRoomButton) : hide(unlockRoomButton);
     BUTTONS.settings.lobbyButton ? show(lobbyButton) : hide(lobbyButton);
-    BUTTONS.participantsList.saveInfoButton
-      ? show(participantsSaveBtn)
-      : hide(participantsSaveBtn);
+    BUTTONS.participantsList.saveInfoButton ? show(participantsSaveBtn) : hide(participantsSaveBtn);
     BUTTONS.main.shareButton ? show(shareButton) : hide(shareButton);
     BUTTONS.main.whiteboardButton ? show(whiteboardButton) : hide(whiteboardButton);
     BUTTONS.main.settingsButton ? show(settingsButton) : hide(settingsButton);
-    BUTTONS.main.participantsButton ? show(participantsButton) : hide(participantsButton);
+    BUTTONS.main.participantsButton ? show(participantsButton) : hide(participantsButton); 
     //...
 }
-
-// ####################################################
