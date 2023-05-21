@@ -29,6 +29,7 @@ const BUTTONS = {
     unlockRoomButton: true,
     lobbyButton: true,
     tabRecording: true,
+    streamsAvailable: true
   },
   producerVideo: {
     fullScreenButton: true,
@@ -87,6 +88,7 @@ function handleRules(isPresenter) {
         BUTTONS.consumerVideo.ejectButton = false;
         BUTTONS.consumerVideo.muteAudioButton = false;
         BUTTONS.consumerVideo.muteVideoButton = false;
+        BUTTONS.settings.streamsAvailable = false;
         //...
     } else {   
         BUTTONS.main.settingsButton = true;
@@ -114,6 +116,10 @@ function handleRules(isPresenter) {
     BUTTONS.main.shareButton ? show(shareButton) : hide(shareButton);
     BUTTONS.main.whiteboardButton ? show(whiteboardButton) : hide(whiteboardButton);
     BUTTONS.main.settingsButton ? show(settingsButton) : hide(settingsButton);
-    BUTTONS.main.participantsButton ? show(participantsButton) : hide(participantsButton); 
+    BUTTONS.main.participantsButton ? show(participantsButton) : hide(participantsButton);
+    if (!BUTTONS.settings.streamsAvailable) {
+        videoMediaContainer.style.display = 'none'
+        videoPinMediaContainer.style.display = 'none';
+    }
     //...
 }

@@ -2638,7 +2638,7 @@ class RoomClient {
           cam.style.height = "100%";
           this.togglePin(pinVideoPosition.value);
           this.videoPinMediaContainer.appendChild(cam);
-          this.videoPinMediaContainer.style.display = "block";
+          this.videoPinMediaContainer.style.display = BUTTONS.settings.streamsAvailable ? "block" : 'none';
           this.pinnedVideoPlayerId = elemId;
           setColor(btnPn, "lime");
         } else {
