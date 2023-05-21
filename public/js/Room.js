@@ -16,7 +16,7 @@ const surveyActive = true;
 
 const url = {
     ipLookup: 'https://extreme-ip-lookup.com/json/?key=demo2',
-    survey: '/newroom',
+    survey: 'https://www.google.com/',
 };
 
 const _PEER = {
@@ -1513,7 +1513,7 @@ function handleRoomClientEvents() {
          if (surveyActive) {
            leaveFeedback();
          } else {
-           openURL("/newroom");
+           openURL("https://www.google.com/");
          }
         
     });
@@ -1544,7 +1544,7 @@ function leaveFeedback() {
         if (result.isConfirmed) {
             openURL(url.survey);
         } else {
-            openURL('/newroom');
+            openURL("https://www.google.com/");
         }
     });
 }
