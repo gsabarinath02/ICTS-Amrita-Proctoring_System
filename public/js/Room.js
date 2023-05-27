@@ -106,6 +106,8 @@ let isButtonsBarOver = false;
 let isRoomLocked = false;
 
 let initStream = null;
+// var peerList = [];
+
 
 // ####################################################
 // INIT ROOM
@@ -165,7 +167,7 @@ function initClient() {
         setTippy('chatCleanTextButton', 'Clean', 'top');
         setTippy('chatPasteButton', 'Paste', 'top');
         setTippy('chatSendButton', 'Send', 'top');
-        setTippy('showChatOnMsg', "Show me when I'm receive a new message", 'top');
+        setTippy('showChatOnMsg', "show popup on new message", 'top');
         setTippy('chatSpeechStartButton', 'Start speech recognition', 'top');
         setTippy('chatSpeechStopButton', 'Stop speech recognition', 'top');
         setTippy('chatEmojiButton', 'Emoji', 'top');
@@ -181,6 +183,18 @@ function initClient() {
     }
     setupWhiteboard();
     initEnumerateDevices();
+    requestNotificationPermission();
+
+}
+
+function requestNotificationPermission() {
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted');
+      }
+    });
+  }
 }
 
 // ####################################################
@@ -422,38 +436,59 @@ function getRoomPassword() {
 // ####################################################
 
 function getPeerInfo() {
-    peer_info = {
-      // user_agent: userAgent,
-      // detect_rtc_version: DetectRTC.version,
-      // is_webrtc_supported: DetectRTC.isWebRTCSupported,
-      join_data_time: getDataTimeString(),
-      peer_uuid: getUUID(),
-      peer_id: socket.id,
-      peer_name: peer_name,
-      peer_presenter: isPresenter,
-      peer_audio: isAudioAllowed,
-      peer_video: isVideoAllowed,
-      peer_screen: isScreenAllowed,
-      peer_video_privacy: isVideoPrivacyActive,
-      peer_hand: false,
-      is_desktop_device:
-        !DetectRTC.isMobileDevice && !isTabletDevice && !isIPadDevice,
-      is_mobile_device: DetectRTC.isMobileDevice,
-      is_tablet_device: isTabletDevice,
-      is_ipad_pro_device: isIPadDevice,
-      os_name: DetectRTC.osName,
-      os_version: DetectRTC.osVersion,
-      browser_name: DetectRTC.browser.name,
-      browser_version: DetectRTC.browser.version,
-      // peer_id: socket.id,
-      // peer_name: peer_name,
-      // peer_audio: isAudioAllowed,
-      // peer_video: isVideoAllowed,
-      // peer_screen: isScreenAllowed,
-      // peer_video_privacy: isVideoPrivacyActive,
-      // peer_hand: false,
-      user_agent: userAgent,
-    };
+  peer_info = {
+    // user_agent: userAgent,
+    // detect_rtc_version: DetectRTC.version,
+    // is_webrtc_supported: DetectRTC.isWebRTCSupported,
+    join_data_time: getDataTimeString(),
+    peer_uuid: getUUID(),
+    peer_id: socket.id,
+    peer_name: peer_name,
+    peer_presenter: isPresenter,
+    peer_audio: isAudioAllowed,
+    peer_video: isVideoAllowed,
+    peer_screen: isScreenAllowed,
+    peer_video_privacy: isVideoPrivacyActive,
+    peer_hand: false,
+    is_desktop_device:
+      !DetectRTC.isMobileDevice && !isTabletDevice && !isIPadDevice,
+    is_mobile_device: DetectRTC.isMobileDevice,
+    is_tablet_device: isTabletDevice,
+    is_ipad_pro_device: isIPadDevice,
+    os_name: DetectRTC.osName,
+    os_version: DetectRTC.osVersion,
+    browser_name: DetectRTC.browser.name,
+    browser_version: DetectRTC.browser.version,
+    // peer_id: socket.id,
+    // peer_name: peer_name,
+    // peer_audio: isAudioAllowed,
+    // peer_video: isVideoAllowed,
+    // peer_screen: isScreenAllowed,
+    // peer_video_privacy: isVideoPrivacyActive,
+    // peer_hand: false,
+    user_agent: userAgent,
+    // left_time: null,
+  };
+
+//   // Add the peer to the list
+//   peerList.push(peerInfo);
+
+//   // Return the peer information
+//   return peerInfo;
+// }
+
+// function removePeer(peerId) {
+//   for (var i = 0; i < peerList.length; i++) {
+//     if (peerList[i].peer_id === peerId) {
+//       // Set the left time for the peer
+//       peerList[i].left_time = getDataTimeString();
+
+//       // Remove the peer from the list
+//       peerList.splice(i, 1);
+
+//       break;
+//     }
+//   }
 }
 
 function getPeerGeoLocation() {

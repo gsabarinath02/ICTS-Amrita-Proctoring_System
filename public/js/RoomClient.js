@@ -2852,19 +2852,33 @@ class RoomClient {
     }
   }
 
-  toggleChat() {
-    let chatRoom = this.getId("chatRoom");
-    if (this.isChatOpen == false) {
-      chatRoom.style.display = "block";
-      chatRoom.style.top = "50%";
-      chatRoom.style.left = "50%";
-      this.sound("open");
-      this.isChatOpen = true;
-    } else {
-      chatRoom.style.display = "none";
-      this.isChatOpen = false;
-    }
+toggleChat() {
+  let chatRoom = this.getId("chatRoom");
+  if (this.isChatOpen == false) {
+    chatRoom.style.display = "block";
+    chatRoom.style.top = "50%";
+    chatRoom.style.left = "50%";
+    this.sound("open");
+    this.isChatOpen = true;
+    this.requestNotificationPermission(); // Request permission for notifications
+    this.showNotification("You Have a new message"); // Show a notification
+  } else {
+    chatRoom.style.display = "none";
+    this.isChatOpen = false;
   }
+}
+
+requestNotificationPermission() {
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
+}
+
+showNotification(message) {
+  if (Notification.permission === "granted") {
+    new Notification(message);
+  }
+}
 
   toggleChatEmoji() {
     this.getId("chatEmoji").classList.toggle("show");
@@ -2985,23 +2999,30 @@ class RoomClient {
     });
   }
 
-  showMessage(data) {
-    if (!this.isChatOpen && this.showChatOnMessage) this.toggleChat();
-    this.setMsgAvatar("left", data.peer_name);
-    this.appendMessage(
-      "left",
-      this.leftMsgAvatar,
-      data.peer_name,
-      data.peer_id,
-      data.peer_msg,
-      data.to_peer_id,
-      data.to_peer_name
-    );
-    if (!this.showChatOnMessage) {
-      this.userLog("info", `💬 New message from: ${data.peer_name}`, "top-end");
-    }
-    this.sound("message");
+showMessage(data) {
+  if (!this.isChatOpen && this.showChatOnMessage) this.toggleChat();
+  this.setMsgAvatar("left", data.peer_name);
+  this.appendMessage(
+    "left",
+    this.leftMsgAvatar,
+    data.peer_name,
+    data.peer_id,
+    data.peer_msg,
+    data.to_peer_id,
+    data.to_peer_name
+  );
+  
+  if (!this.isChatOpen) {
+    this.requestNotificationPermission(); // Request permission for notifications
+    this.showNotification(`New message from ${data.peer_name}`); // Show a notification
   }
+
+  if (!this.showChatOnMessage) {
+    this.userLog("info", `💬 New message from: ${data.peer_name}`, "top-end");
+  }
+  this.sound("message");
+}
+
 
   setMsgAvatar(avatar, peerName) {
     // let avatarImg =
@@ -4913,6 +4934,7 @@ class RoomClient {
               "browser_name",
               "browser_version",
               //'user_agent',
+              // "left_time", // Include the "left_time" property
             ],
             2
           ) +

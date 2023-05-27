@@ -36,9 +36,3 @@ server_tunnel: 'https://xxxxxxxxxxxxxxxxxx.ngrok.io'
 ```
 
 So open it in your browser, join in the room, share it to whom you want and wait participants to join.
-
----
-
-## Support
-
-[![](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/AmritaShare/AmritaShare-sfu-free-video-calls-messaging-screen-sharing-recording)

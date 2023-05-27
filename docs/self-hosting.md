@@ -39,7 +39,7 @@ $ npm install -g npm@latest
 
 ```bash
 # Clone this repo
-$ git clone https://github.com/miroslavpejic85/AmritaShare.git
+$ git clone https://github.com/gsabarinath02/AmritaShare.git
 # Go to to dir AmritaShare
 $ cd AmritaShare
 # Copy app/src/config.template.js in app/src/config.js
@@ -263,9 +263,3 @@ To update your instance of AmritaShare SFU at latest commit, execute:
 ```bash
 ./sfuUpdate.sh
 ```
-
----
-
-## Support
-
-[![](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/AmritaShare/AmritaShare-sfu-free-video-calls-messaging-screen-sharing-recording)
