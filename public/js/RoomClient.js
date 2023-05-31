@@ -2861,7 +2861,7 @@ toggleChat() {
     this.sound("open");
     this.isChatOpen = true;
     this.requestNotificationPermission(); // Request permission for notifications
-    this.showNotification("You Have a new message"); // Show a notification
+    // this.showNotification("Chat box opened!!"); // Show a notification
   } else {
     chatRoom.style.display = "none";
     this.isChatOpen = false;
@@ -3012,13 +3012,15 @@ showMessage(data) {
     data.to_peer_name
   );
   
-  if (!this.isChatOpen) {
+  if (this.isChatOpen) {
     this.requestNotificationPermission(); // Request permission for notifications
-    this.showNotification(`New message from ${data.peer_name}`); // Show a notification
+    this.showNotification(`New message from ${data.peer_name}: ${data.peer_msg}`); // Show a notification
   }
 
-  if (!this.showChatOnMessage) {
+  if (this.showChatOnMessage) {
     this.userLog("info", `💬 New message from: ${data.peer_name}`, "top-end");
+    this.requestNotificationPermission(); // Request permission for notifications
+    this.showNotification(`New message from ${data.peer_name}: ${data.peer_msg}`); // Show a notification
   }
   this.sound("message");
 }
