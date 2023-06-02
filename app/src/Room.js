@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const config = require('./config');
-const Logger = require('./Logger');
-const log = new Logger('Room');
+const config = require("./config");
+const Logger = require("./Logger");
+const log = new Logger("Room");
 
 module.exports = class Room {
     constructor(room_id, worker, io) {
@@ -45,7 +45,7 @@ module.exports = class Room {
     // ####################################################
 
     async startAudioLevelObservation(router) {
-        log.debug('Start audioLevelObserver for signaling active speaker...');
+        log.debug("Start audioLevelObserver for signaling active speaker...");
 
         this.audioLevelObserver = await router.createAudioLevelObserver({
             maxEntries: 1,
@@ -53,10 +53,10 @@ module.exports = class Room {
             interval: 100,
         });
 
-        this.audioLevelObserver.on('volumes', (volumes) => {
+        this.audioLevelObserver.on("volumes", (volumes) => {
             this.sendActiveSpeakerVolume(volumes);
         });
-        this.audioLevelObserver.on('silence', () => {
+        this.audioLevelObserver.on("silence", () => {
             //log.debug('audioLevelObserver', { volume: 'silence' });
         });
     }
@@ -72,12 +72,12 @@ module.exports = class Room {
                     peer.producers.forEach((peerProducer) => {
                         if (
                             producer.id === peerProducer.id &&
-                            peerProducer.kind == 'audio' &&
+                            peerProducer.kind == "audio" &&
                             peer.peer_audio === true
                         ) {
                             let data = { peer_name: peer.peer_name, peer_id: peer.id, audioVolume: audioVolume };
                             //log.debug('audioLevelObserver id [' + this.id + ']', data);
-                            this.broadCast(0, 'audioVolume', data);
+                            this.broadCast(0, "audioVolume", data);
                         }
                     });
                 });
@@ -166,20 +166,20 @@ module.exports = class Room {
         }
 
         transport.on(
-            'dtlsstatechange',
+            "dtlsstatechange",
             function (dtlsState) {
-                if (dtlsState === 'closed') {
-                    log.debug('Transport close', { peer_name: this.peers.get(socket_id).peer_name });
+                if (dtlsState === "closed") {
+                    log.debug("Transport close", { peer_name: this.peers.get(socket_id).peer_name });
                     transport.close();
                 }
             }.bind(this),
         );
 
-        transport.on('close', () => {
-            log.debug('Transport close', { peer_name: this.peers.get(socket_id).peer_name });
+        transport.on("close", () => {
+            log.debug("Transport close", { peer_name: this.peers.get(socket_id).peer_name });
         });
 
-        log.debug('Adding transport', { transportId: transport.id });
+        log.debug("Adding transport", { transportId: transport.id });
         this.peers.get(socket_id).addTransport(transport);
         return {
             params: {
@@ -202,7 +202,7 @@ module.exports = class Room {
                     .get(socket_id)
                     .createProducer(producerTransportId, rtpParameters, kind, type);
                 resolve(producer.id);
-                this.broadCast(socket_id, 'newProducers', [
+                this.broadCast(socket_id, "newProducers", [
                     {
                         producer_id: producer.id,
                         producer_socket_id: socket_id,
@@ -226,7 +226,7 @@ module.exports = class Room {
                 rtpCapabilities,
             })
         ) {
-            return log.warn('Can not consume', {
+            return log.warn("Can not consume", {
                 socket_id: socket_id,
                 consumer_transport_id: consumer_transport_id,
                 producer_id: producer_id,
@@ -238,16 +238,16 @@ module.exports = class Room {
             .createConsumer(consumer_transport_id, producer_id, rtpCapabilities);
 
         consumer.on(
-            'producerclose',
+            "producerclose",
             function () {
-                log.debug('Consumer closed due to producerclose event', {
+                log.debug("Consumer closed due to producerclose event", {
                     peer_name: this.peers.get(socket_id).peer_name,
                     consumer_id: consumer.id,
                 });
                 this.peers.get(socket_id).removeConsumer(consumer.id);
 
                 // tell client consumer is dead
-                this.io.to(socket_id).emit('consumerClosed', {
+                this.io.to(socket_id).emit("consumerClosed", {
                     consumer_id: consumer.id,
                     consumer_kind: consumer.kind,
                 });

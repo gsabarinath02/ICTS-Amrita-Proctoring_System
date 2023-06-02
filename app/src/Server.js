@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /*
 ███████ ███████ ██████  ██    ██ ███████ ██████  
@@ -28,51 +28,50 @@ dependencies: {
 }
 */
 
-
-const express = require('express');
-const cors = require('cors');
-const compression = require('compression');
-const https = require('httpolyglot');
-const mediasoup = require('mediasoup');
-const mediasoupClient = require('mediasoup-client');
-const http = require('http');
-const config = require('./config');
-const path = require('path');
-const ngrok = require('ngrok');
-const fs = require('fs');
-const checkXSS = require('./XSS.js');
-const Host = require('./Host');
-const Room = require('./Room');
-const Peer = require('./Peer');
-const ServerApi = require('./ServerApi');
-const Logger = require('./Logger');
-const log = new Logger('Server');
-const yamlJS = require('yamljs');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = yamlJS.load(path.join(__dirname + '/../api/swagger.yaml'));
-const Sentry = require('@sentry/node');
-const { CaptureConsole } = require('@sentry/integrations');
+const express = require("express");
+const cors = require("cors");
+const compression = require("compression");
+const https = require("httpolyglot");
+const mediasoup = require("mediasoup");
+const mediasoupClient = require("mediasoup-client");
+const http = require("http");
+const config = require("./config");
+const path = require("path");
+const ngrok = require("ngrok");
+const fs = require("fs");
+const checkXSS = require("./XSS.js");
+const Host = require("./Host");
+const Room = require("./Room");
+const Peer = require("./Peer");
+const ServerApi = require("./ServerApi");
+const Logger = require("./Logger");
+const log = new Logger("Server");
+const yamlJS = require("yamljs");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = yamlJS.load(path.join(__dirname + "/../api/swagger.yaml"));
+const Sentry = require("@sentry/node");
+const { CaptureConsole } = require("@sentry/integrations");
 
 // Slack API
-const CryptoJS = require('crypto-js');
-const qS = require('qs');
+const CryptoJS = require("crypto-js");
+const qS = require("qs");
 const slackEnabled = config.slack.enabled;
 const slackSigningSecret = config.slack.signingSecret;
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 const app = express();
 
 const options = {
-    key: fs.readFileSync(path.join(__dirname, config.sslKey), 'utf-8'),
-    cert: fs.readFileSync(path.join(__dirname, config.sslCrt), 'utf-8'),
+    key: fs.readFileSync(path.join(__dirname, config.sslKey), "utf-8"),
+    cert: fs.readFileSync(path.join(__dirname, config.sslCrt), "utf-8"),
 };
 
 const httpsServer = https.createServer(options, app);
-const io = require('socket.io')(httpsServer, {
+const io = require("socket.io")(httpsServer, {
     maxHttpBufferSize: 1e7,
-    transports: ['websocket'],
+    transports: ["websocket"],
 });
-const host = 'https://' + 'localhost' + ':' + config.listenPort; // config.listenIp
+const host = "https://" + "localhost" + ":" + config.listenPort; // config.listenIp
 
 const hostCfg = {
     protected: config.hostProtected,
@@ -81,8 +80,8 @@ const hostCfg = {
     authenticated: !config.hostProtected,
 };
 
-const apiBasePath = '/api/v1'; // api endpoint path
-const api_docs = host + apiBasePath + '/docs'; // api docs
+const apiBasePath = "/api/v1"; // api endpoint path
+const api_docs = host + apiBasePath + "/docs"; // api docs
 
 // Sentry monitoring
 const sentryEnabled = config.sentry.enabled;
@@ -94,7 +93,7 @@ if (sentryEnabled) {
         integrations: [
             new CaptureConsole({
                 // ['log', 'info', 'warn', 'error', 'debug', 'assert']
-                levels: ['warn', 'error'],
+                levels: ["warn", "error"],
             }),
         ],
         tracesSampleRate: sentryTracesSampleRate,
@@ -110,19 +109,19 @@ if (sentryEnabled) {
 
 // directory
 const dir = {
-    public: path.join(__dirname, '../../', 'public'),
+    public: path.join(__dirname, "../../", "public"),
 };
 
 // html views
 const views = {
-    about: path.join(__dirname, '../../', 'public/views/about.html'),
-    landing: path.join(__dirname, '../../', 'public/views/landing.html'),
-    login: path.join(__dirname, '../../', 'public/views/login.html'),
-    newRoom: path.join(__dirname, '../../', 'public/views/newroom.html'),
-    notFound: path.join(__dirname, '../../', 'public/views/404.html'),
-    permission: path.join(__dirname, '../../', 'public/views/permission.html'),
-    privacy: path.join(__dirname, '../../', 'public/views/privacy.html'),
-    room: path.join(__dirname, '../../', 'public/views/Room.html'),
+    about: path.join(__dirname, "../../", "public/views/about.html"),
+    landing: path.join(__dirname, "../../", "public/views/landing.html"),
+    login: path.join(__dirname, "../../", "public/views/login.html"),
+    newRoom: path.join(__dirname, "../../", "public/views/newroom.html"),
+    notFound: path.join(__dirname, "../../", "public/views/404.html"),
+    permission: path.join(__dirname, "../../", "public/views/permission.html"),
+    privacy: path.join(__dirname, "../../", "public/views/privacy.html"),
+    room: path.join(__dirname, "../../", "public/views/Room.html"),
 };
 
 let announcedIP = config.mediasoup.webRtcTransport.listenIps[0].announcedIp; // AnnouncedIP (server public IPv4)
@@ -133,7 +132,6 @@ let roomList = new Map();
 
 let presenters = {}; // collect presenters grp by roomId
 
-
 // All mediasoup workers
 let workers = [];
 let nextMediasoupWorkerIdx = 0;
@@ -142,12 +140,12 @@ let nextMediasoupWorkerIdx = 0;
 if (!announcedIP) {
     http.get(
         {
-            host: 'api.ipify.org',
+            host: "api.ipify.org",
             port: 80,
-            path: '/',
+            path: "/",
         },
         (resp) => {
-            resp.on('data', (ip) => {
+            resp.on("data", (ip) => {
                 announcedIP = ip.toString();
                 config.mediasoup.webRtcTransport.listenIps[0].announcedIp = announcedIP;
                 startServer();
@@ -165,24 +163,24 @@ function startServer() {
     app.use(express.json());
     app.use(express.static(dir.public));
     app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(apiBasePath + '/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); // api docs
+    app.use(apiBasePath + "/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument)); // api docs
 
     // all start from here
-    app.get('*', function (next) {
+    app.get("*", function (next) {
         next();
     });
 
     // Remove trailing slashes in url handle bad requests
     app.use((err, req, res, next) => {
-        if (err instanceof SyntaxError || err.status === 400 || 'body' in err) {
-            log.error('Request Error', {
+        if (err instanceof SyntaxError || err.status === 400 || "body" in err) {
+            log.error("Request Error", {
                 header: req.headers,
                 body: req.body,
                 error: err.message,
             });
             return res.status(400).send({ status: 404, message: err.message }); // Bad request
         }
-        if (req.path.substr(-1) === '/' && req.path.length > 1) {
+        if (req.path.substr(-1) === "/" && req.path.length > 1) {
             let query = req.url.slice(req.path.length);
             res.redirect(301, req.path.slice(0, -1) + query);
         } else {
@@ -191,7 +189,7 @@ function startServer() {
     });
 
     // main page
-    app.get(['/'], (req, res) => {
+    app.get(["/"], (req, res) => {
         if (hostCfg.protected == true) {
             hostCfg.authenticated = false;
             res.sendFile(views.login);
@@ -201,7 +199,7 @@ function startServer() {
     });
 
     // handle login on host protected
-    app.get(['/login'], (req, res) => {
+    app.get(["/login"], (req, res) => {
         if (hostCfg.protected == true) {
             let ip = getIP(req);
             log.debug(`Request login to host from: ${ip}`, req.query);
@@ -209,20 +207,20 @@ function startServer() {
             if (username == hostCfg.username && password == hostCfg.password) {
                 hostCfg.authenticated = true;
                 authHost = new Host(ip, true);
-                log.debug('LOGIN OK', { ip: ip, authorized: authHost.isAuthorized(ip) });
+                log.debug("LOGIN OK", { ip: ip, authorized: authHost.isAuthorized(ip) });
                 res.sendFile(views.landing);
             } else {
-                log.debug('LOGIN KO', { ip: ip, authorized: false });
+                log.debug("LOGIN KO", { ip: ip, authorized: false });
                 hostCfg.authenticated = false;
                 res.sendFile(views.login);
             }
         } else {
-            res.redirect('/');
+            res.redirect("/");
         }
     });
 
     // set new room name and join
-    app.get(['/newroom'], (req, res) => {
+    app.get(["/newroom"], (req, res) => {
         if (hostCfg.protected == true) {
             let ip = getIP(req);
             if (allowedIP(ip)) {
@@ -237,44 +235,44 @@ function startServer() {
     });
 
     // no room name specified to join || direct join
-    app.get('/join/', (req, res) => {
+    app.get("/join/", (req, res) => {
         if (hostCfg.authenticated && Object.keys(req.query).length > 0) {
-            log.debug('Direct Join', req.query);
+            log.debug("Direct Join", req.query);
             // http://localhost:3010/join?room=test&password=0&name=amrita-&audio=1&video=1&screen=1&notify=1
             const { room, password, name, audio, video, screen, notify } = req.query;
             if (room && password && name && audio && video && screen && notify) {
                 return res.sendFile(views.room);
             }
         }
-        res.redirect('/');
+        res.redirect("/");
     });
 
     // join room by id
-    app.get('/join/:roomId', (req, res) => {
+    app.get("/join/:roomId", (req, res) => {
         if (hostCfg.authenticated) {
             res.sendFile(views.room);
         } else {
-            res.redirect('/');
+            res.redirect("/");
         }
     });
 
     // not specified correctly the room id
-    app.get('/join/*', (req, res) => {
-        res.redirect('/');
+    app.get("/join/*", (req, res) => {
+        res.redirect("/");
     });
 
     // if not allow video/audio
-    app.get(['/permission'], (req, res) => {
+    app.get(["/permission"], (req, res) => {
         res.sendFile(views.permission);
     });
 
     // privacy policy
-    app.get(['/privacy'], (req, res) => {
+    app.get(["/privacy"], (req, res) => {
         res.sendFile(views.privacy);
     });
 
     // amrita-share about
-    app.get(['/about'], (req, res) => {
+    app.get(["/about"], (req, res) => {
         res.sendFile(views.about);
     });
 
@@ -283,24 +281,24 @@ function startServer() {
     // ####################################################
 
     // request meeting room endpoint
-    app.post(['/api/v1/meeting'], (req, res) => {
+    app.post(["/api/v1/meeting"], (req, res) => {
         // check if user was authorized for the api call
         let host = req.headers.host;
         let authorization = req.headers.authorization;
         let api = new ServerApi(host, authorization);
         if (!api.isAuthorized()) {
-            log.debug('amrita-share get meeting - Unauthorized', {
+            log.debug("amrita-share get meeting - Unauthorized", {
                 header: req.headers,
                 body: req.body,
             });
-            return res.status(403).json({ error: 'Unauthorized!' });
+            return res.status(403).json({ error: "Unauthorized!" });
         }
         // setup meeting URL
         let meetingURL = api.getMeetingURL();
-        res.setHeader('Content-Type', 'application/json');
+        res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ meeting: meetingURL }));
         // log.debug the output if all done
-        log.debug('amrita-share get meeting - Authorized', {
+        log.debug("amrita-share get meeting - Authorized", {
             header: req.headers,
             body: req.body,
             meeting: meetingURL,
@@ -308,24 +306,24 @@ function startServer() {
     });
 
     // request join room endpoint
-    app.post(['/api/v1/join'], (req, res) => {
+    app.post(["/api/v1/join"], (req, res) => {
         // check if user was authorized for the api call
         let host = req.headers.host;
         let authorization = req.headers.authorization;
         let api = new ServerApi(host, authorization);
         if (!api.isAuthorized()) {
-            log.debug('amrita-share get join - Unauthorized', {
+            log.debug("amrita-share get join - Unauthorized", {
                 header: req.headers,
                 body: req.body,
             });
-            return res.status(403).json({ error: 'Unauthorized!' });
+            return res.status(403).json({ error: "Unauthorized!" });
         }
         // setup Join URL
         let joinURL = api.getJoinURL(req.body);
-        res.setHeader('Content-Type', 'application/json');
+        res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ join: joinURL }));
         // log.debug the output if all done
-        log.debug('amrita-share get join - Authorized', {
+        log.debug("amrita-share get join - Authorized", {
             header: req.headers,
             body: req.body,
             join: joinURL,
@@ -336,35 +334,35 @@ function startServer() {
     // SLACK API
     // ####################################################
 
-    app.post('/slack', (req, res) => {
-        if (!slackEnabled) return res.end('`Under maintenance` - Please check back soon.');
+    app.post("/slack", (req, res) => {
+        if (!slackEnabled) return res.end("`Under maintenance` - Please check back soon.");
 
-        log.debug('Slack', req.headers);
+        log.debug("Slack", req.headers);
 
-        if (!slackSigningSecret) return res.end('`Slack Signing Secret is empty!`');
+        if (!slackSigningSecret) return res.end("`Slack Signing Secret is empty!`");
 
-        let slackSignature = req.headers['x-slack-signature'];
-        let requestBody = qS.stringify(req.body, { format: 'RFC1738' });
-        let timeStamp = req.headers['x-slack-request-timestamp'];
+        let slackSignature = req.headers["x-slack-signature"];
+        let requestBody = qS.stringify(req.body, { format: "RFC1738" });
+        let timeStamp = req.headers["x-slack-request-timestamp"];
         let time = Math.floor(new Date().getTime() / 1000);
 
-        if (Math.abs(time - timeStamp) > 300) return res.end('`Wrong timestamp` - Ignore this request.');
+        if (Math.abs(time - timeStamp) > 300) return res.end("`Wrong timestamp` - Ignore this request.");
 
-        let sigBaseString = 'v0:' + timeStamp + ':' + requestBody;
-        let mySignature = 'v0=' + CryptoJS.HmacSHA256(sigBaseString, slackSigningSecret);
+        let sigBaseString = "v0:" + timeStamp + ":" + requestBody;
+        let mySignature = "v0=" + CryptoJS.HmacSHA256(sigBaseString, slackSigningSecret);
 
         if (mySignature == slackSignature) {
             let host = req.headers.host;
             let api = new ServerApi(host);
             let meetingURL = api.getMeetingURL();
-            log.debug('Slack', { meeting: meetingURL });
+            log.debug("Slack", { meeting: meetingURL });
             return res.end(meetingURL);
         }
-        return res.end('`Wrong signature` - Verification failed!');
+        return res.end("`Wrong signature` - Verification failed!");
     });
 
     // not match any of page before, so 404 not found
-    app.get('*', function (req, res) {
+    app.get("*", function (req, res) {
         res.sendFile(views.notFound);
     });
 
@@ -381,8 +379,8 @@ function startServer() {
             const data = await api.listTunnels(); // v4
             const pu0 = data.tunnels[0].public_url;
             const pu1 = data.tunnels[1].public_url;
-            const tunnel = pu0.startsWith('https') ? pu0 : pu1;
-            log.info('Listening on', {
+            const tunnel = pu0.startsWith("https") ? pu0 : pu1;
+            log.info("Listening on", {
                 node_version: process.versions.node,
                 hostConfig: hostCfg,
                 announced_ip: announcedIP,
@@ -394,7 +392,7 @@ function startServer() {
                 sentry_enabled: sentryEnabled,
             });
         } catch (err) {
-            log.error('Ngrok Start error: ', err.body);
+            log.error("Ngrok Start error: ", err.body);
             process.exit(1);
         }
     }
@@ -416,13 +414,13 @@ function startServer() {
                                                                                            
                                                                                              
         `,
-            'font-family:monospace',
+            "font-family:monospace",
         );
 
-        if (config.ngrokAuthToken !== '') {
+        if (config.ngrokAuthToken !== "") {
             return ngrokStart();
         }
-        log.debug('Settings', {
+        log.debug("Settings", {
             node_version: process.versions.node,
             hostConfig: hostCfg,
             announced_ip: announcedIP,
@@ -442,7 +440,7 @@ function startServer() {
         try {
             await createWorkers();
         } catch (err) {
-            log.error('Create Worker ERR --->', err);
+            log.error("Create Worker ERR --->", err);
             process.exit(1);
         }
     })();
@@ -452,7 +450,7 @@ function startServer() {
 
         const { logLevel, logTags, rtcMinPort, rtcMaxPort } = config.mediasoup.worker;
 
-        log.debug('WORKERS:', numWorkers);
+        log.debug("WORKERS:", numWorkers);
 
         for (let i = 0; i < numWorkers; i++) {
             let worker = await mediasoup.createWorker({
@@ -461,8 +459,8 @@ function startServer() {
                 rtcMinPort: rtcMinPort,
                 rtcMaxPort: rtcMaxPort,
             });
-            worker.on('died', () => {
-                log.error('Mediasoup worker died, exiting in 2 seconds... [pid:%d]', worker.pid);
+            worker.on("died", () => {
+                log.error("Mediasoup worker died, exiting in 2 seconds... [pid:%d]", worker.pid);
                 setTimeout(() => process.exit(1), 2000);
             });
             workers.push(worker);
@@ -479,107 +477,107 @@ function startServer() {
     // SOCKET IO
     // ####################################################
 
-    io.on('connection', (socket) => {
-        socket.on('createRoom', async ({ room_id }, callback) => {
+    io.on("connection", (socket) => {
+        socket.on("createRoom", async ({ room_id }, callback) => {
             socket.room_id = room_id;
 
             if (roomList.has(socket.room_id)) {
-                callback({ error: 'already exists' });
+                callback({ error: "already exists" });
             } else {
-                log.debug('Created room', { room_id: socket.room_id });
+                log.debug("Created room", { room_id: socket.room_id });
                 let worker = await getMediasoupWorker();
                 roomList.set(socket.room_id, new Room(socket.room_id, worker, io));
                 callback({ room_id: socket.room_id });
             }
         });
 
-        socket.on('getPeerCounts', async ({}, callback) => {
+        socket.on("getPeerCounts", async ({}, callback) => {
             if (!roomList.has(socket.room_id)) return;
 
             let peerCounts = roomList.get(socket.room_id).getPeersCount();
 
-            log.debug('Peer counts', { peerCounts: peerCounts });
+            log.debug("Peer counts", { peerCounts: peerCounts });
 
             callback({ peerCounts: peerCounts });
         });
 
-        socket.on('cmd', (dataObject) => {
+        socket.on("cmd", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
-            log.debug('Cmd', data);
+            log.debug("Cmd", data);
 
             // cmd|foo|bar|....
-            const words = data.split('|');
+            const words = data.split("|");
             let cmd = words[0];
             switch (cmd) {
-              case "privacy":
-                roomList
-                  .get(socket.room_id)
-                  .getPeers()
-                  .get(socket.id)
-                  .updatePeerInfo({ type: cmd, status: words[2] == "true" });
-                break;
-              default:
-                break;
-              //...
+                case "privacy":
+                    roomList
+                        .get(socket.room_id)
+                        .getPeers()
+                        .get(socket.id)
+                        .updatePeerInfo({ type: cmd, status: words[2] == "true" });
+                    break;
+                default:
+                    break;
+                //...
             }
 
-            roomList.get(socket.room_id).broadCast(socket.id, 'cmd', data);
+            roomList.get(socket.room_id).broadCast(socket.id, "cmd", data);
         });
 
-        socket.on('roomAction', (dataObject) => {
+        socket.on("roomAction", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
-            log.debug('Room action:', data);
+            log.debug("Room action:", data);
             switch (data.action) {
-                case 'lock':
+                case "lock":
                     if (!roomList.get(socket.room_id).isLocked()) {
                         roomList.get(socket.room_id).setLocked(true, data.password);
-                        roomList.get(socket.room_id).broadCast(socket.id, 'roomAction', data.action);
+                        roomList.get(socket.room_id).broadCast(socket.id, "roomAction", data.action);
                     }
                     break;
-                case 'checkPassword':
+                case "checkPassword":
                     let roomData = {
                         room: null,
-                        password: 'KO',
+                        password: "KO",
                     };
                     if (data.password == roomList.get(socket.room_id).getPassword()) {
                         roomData.room = roomList.get(socket.room_id).toJson();
-                        roomData.password = 'OK';
+                        roomData.password = "OK";
                     }
-                    roomList.get(socket.room_id).sendTo(socket.id, 'roomPassword', roomData);
+                    roomList.get(socket.room_id).sendTo(socket.id, "roomPassword", roomData);
                     break;
-                case 'unlock':
+                case "unlock":
                     roomList.get(socket.room_id).setLocked(false);
-                    roomList.get(socket.room_id).broadCast(socket.id, 'roomAction', data.action);
+                    roomList.get(socket.room_id).broadCast(socket.id, "roomAction", data.action);
                     break;
-                case 'lobbyOn':
+                case "lobbyOn":
                     roomList.get(socket.room_id).setLobbyEnabled(true);
-                    roomList.get(socket.room_id).broadCast(socket.id, 'roomAction', data.action);
+                    roomList.get(socket.room_id).broadCast(socket.id, "roomAction", data.action);
                     break;
-                case 'lobbyOff':
+                case "lobbyOff":
                     roomList.get(socket.room_id).setLobbyEnabled(false);
-                    roomList.get(socket.room_id).broadCast(socket.id, 'roomAction', data.action);
+                    roomList.get(socket.room_id).broadCast(socket.id, "roomAction", data.action);
                     break;
             }
-            log.debug('Room status', {
+            log.debug("Room status", {
                 locked: roomList.get(socket.room_id).isLocked(),
                 lobby: roomList.get(socket.room_id).isLobbyEnabled(),
             });
         });
 
-        socket.on('roomLobby', (dataObject) => {
+        socket.on("roomLobby", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
             data.room = roomList.get(socket.room_id).toJson();
 
-            log.debug('Room lobby', {
+            log.debug("Room lobby", {
                 peer_id: data.peer_id,
                 peer_name: data.peer_name,
                 peers_id: data.peers_id,
@@ -589,188 +587,177 @@ function startServer() {
 
             if (data.peers_id && data.broadcast) {
                 for (let peer_id in data.peers_id) {
-                    roomList.get(socket.room_id).sendTo(data.peers_id[peer_id], 'roomLobby', data);
+                    roomList.get(socket.room_id).sendTo(data.peers_id[peer_id], "roomLobby", data);
                 }
             } else {
-                roomList.get(socket.room_id).sendTo(data.peer_id, 'roomLobby', data);
+                roomList.get(socket.room_id).sendTo(data.peer_id, "roomLobby", data);
             }
         });
 
-        socket.on('peerAction', (dataObject) => {
+        socket.on("peerAction", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
-            log.debug('Peer action', data);
+            log.debug("Peer action", data);
 
             if (data.broadcast) {
-                roomList.get(socket.room_id).broadCast(data.peer_id, 'peerAction', data);
+                roomList.get(socket.room_id).broadCast(data.peer_id, "peerAction", data);
             } else {
-                roomList.get(socket.room_id).sendTo(data.peer_id, 'peerAction', data);
+                roomList.get(socket.room_id).sendTo(data.peer_id, "peerAction", data);
             }
         });
 
-        socket.on('updatePeerInfo', (dataObject) => {
+        socket.on("updatePeerInfo", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
             // update my peer_info status to all in the room
             roomList.get(socket.room_id).getPeers().get(socket.id).updatePeerInfo(data);
-            roomList.get(socket.room_id).broadCast(socket.id, 'updatePeerInfo', data);
+            roomList.get(socket.room_id).broadCast(socket.id, "updatePeerInfo", data);
         });
 
-        socket.on('fileInfo', (dataObject) => {
+        socket.on("fileInfo", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
-            log.debug('Send File Info', data);
+            log.debug("Send File Info", data);
             if (data.broadcast) {
-                roomList.get(socket.room_id).broadCast(socket.id, 'fileInfo', data);
+                roomList.get(socket.room_id).broadCast(socket.id, "fileInfo", data);
             } else {
-                roomList.get(socket.room_id).sendTo(data.peer_id, 'fileInfo', data);
+                roomList.get(socket.room_id).sendTo(data.peer_id, "fileInfo", data);
             }
         });
 
-        socket.on('file', (data) => {
+        socket.on("file", (data) => {
             if (!roomList.has(socket.room_id)) return;
 
             if (data.broadcast) {
-                roomList.get(socket.room_id).broadCast(socket.id, 'file', data);
+                roomList.get(socket.room_id).broadCast(socket.id, "file", data);
             } else {
-                roomList.get(socket.room_id).sendTo(data.peer_id, 'file', data);
+                roomList.get(socket.room_id).sendTo(data.peer_id, "file", data);
             }
         });
 
-        socket.on('fileAbort', (dataObject) => {
+        socket.on("fileAbort", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
-            roomList.get(socket.room_id).broadCast(socket.id, 'fileAbort', data);
+            roomList.get(socket.room_id).broadCast(socket.id, "fileAbort", data);
         });
 
-        socket.on('shareVideoAction', (dataObject) => {
+        socket.on("shareVideoAction", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
-            log.debug('Share video: ', data);
-            if (data.peer_id == 'all') {
-                roomList.get(socket.room_id).broadCast(socket.id, 'shareVideoAction', data);
+            log.debug("Share video: ", data);
+            if (data.peer_id == "all") {
+                roomList.get(socket.room_id).broadCast(socket.id, "shareVideoAction", data);
             } else {
-                roomList.get(socket.room_id).sendTo(data.peer_id, 'shareVideoAction', data);
+                roomList.get(socket.room_id).sendTo(data.peer_id, "shareVideoAction", data);
             }
         });
 
-        socket.on('wbCanvasToJson', (dataObject) => {
+        socket.on("wbCanvasToJson", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
             // let objLength = bytesToSize(Object.keys(data).length);
             // log.debug('Send Whiteboard canvas JSON', { length: objLength });
-            roomList.get(socket.room_id).broadCast(socket.id, 'wbCanvasToJson', data);
+            roomList.get(socket.room_id).broadCast(socket.id, "wbCanvasToJson", data);
         });
 
-        socket.on('whiteboardAction', (dataObject) => {
+        socket.on("whiteboardAction", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
-            log.debug('Whiteboard', data);
-            roomList.get(socket.room_id).broadCast(socket.id, 'whiteboardAction', data);
+            log.debug("Whiteboard", data);
+            roomList.get(socket.room_id).broadCast(socket.id, "whiteboardAction", data);
         });
 
-        socket.on('setVideoOff', (dataObject) => {
+        socket.on("setVideoOff", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             const data = checkXSS(dataObject);
 
-            log.debug('Video off', getPeerName());
-            roomList.get(socket.room_id).broadCast(socket.id, 'setVideoOff', data);
+            log.debug("Video off", getPeerName());
+            roomList.get(socket.room_id).broadCast(socket.id, "setVideoOff", data);
         });
 
-        socket.on('join', (dataObject, cb) => {
+        socket.on("join", (dataObject, cb) => {
             if (!roomList.has(socket.room_id)) {
                 return cb({
-                    error: 'Room does not exist',
+                    error: "Room does not exist",
                 });
             }
 
             const data = checkXSS(dataObject);
 
-            log.debug('User joined', data);
+            log.debug("User joined", data);
             roomList.get(socket.room_id).addPeer(new Peer(socket.id, data));
 
             if (roomList.get(socket.room_id).isLocked()) {
-                log.debug('User rejected because room is locked');
-                return cb('isLocked');
+                log.debug("User rejected because room is locked");
+                return cb("isLocked");
             }
 
             if (roomList.get(socket.room_id).isLobbyEnabled()) {
-                log.debug('User waiting to join room because lobby is enabled');
-                roomList.get(socket.room_id).broadCast(socket.id, 'roomLobby', {
+                log.debug("User waiting to join room because lobby is enabled");
+                roomList.get(socket.room_id).broadCast(socket.id, "roomLobby", {
                     peer_id: data.peer_info.peer_id,
                     peer_name: data.peer_info.peer_name,
-                    lobby_status: 'waiting',
+                    lobby_status: "waiting",
                 });
-                return cb('isLobby');
+                return cb("isLobby");
             }
 
-             if (!(socket.room_id in presenters))
-               presenters[socket.room_id] = {};
+            if (!(socket.room_id in presenters)) presenters[socket.room_id] = {};
 
-             const peer_name = roomList
-               .get(socket.room_id)
-               .getPeers()
-               ?.get(socket.id)?.peer_info?.peer_name;
-             const peer_uuid = roomList
-               .get(socket.room_id)
-               .getPeers()
-               ?.get(socket.id)?.peer_info?.peer_uuid;
+            const peer_name = roomList.get(socket.room_id).getPeers()?.get(socket.id)?.peer_info?.peer_name;
+            const peer_uuid = roomList.get(socket.room_id).getPeers()?.get(socket.id)?.peer_info?.peer_uuid;
 
-             if (Object.keys(presenters[socket.room_id]).length === 0) {
-               presenters[socket.room_id] = {
-                 peer_name: peer_name,
-                 peer_uuid: peer_uuid,
-                 is_presenter: true,
-               };
-             }
+            if (Object.keys(presenters[socket.room_id]).length === 0) {
+                presenters[socket.room_id] = {
+                    peer_name: peer_name,
+                    peer_uuid: peer_uuid,
+                    is_presenter: true,
+                };
+            }
 
-             log.debug(
-               "[Join] - Connected presenters grp by roomId",
-               presenters
-             );
+            log.debug("[Join] - Connected presenters grp by roomId", presenters);
 
-             const isPresenter =
-               Object.keys(presenters[socket.room_id]).length > 1 &&
-               presenters[socket.room_id]["peer_name"] == peer_name &&
-               presenters[socket.room_id]["peer_uuid"] == peer_uuid;
+            const isPresenter =
+                Object.keys(presenters[socket.room_id]).length > 1 &&
+                presenters[socket.room_id]["peer_name"] == peer_name &&
+                presenters[socket.room_id]["peer_uuid"] == peer_uuid;
 
-             roomList
-               .get(socket.room_id)
-               .getPeers()
-               .get(socket.id)
-               .updatePeerInfo({ type: "presenter", status: isPresenter });
+            roomList
+                .get(socket.room_id)
+                .getPeers()
+                .get(socket.id)
+                .updatePeerInfo({ type: "presenter", status: isPresenter });
 
-             log.debug("[Join] - Is presenter", {
-               roomId: socket.room_id,
-               peer_name: peer_name,
-               peer_presenter: isPresenter,
-             });
-
+            log.debug("[Join] - Is presenter", {
+                roomId: socket.room_id,
+                peer_name: peer_name,
+                peer_presenter: isPresenter,
+            });
 
             cb(roomList.get(socket.room_id).toJson());
         });
 
-        socket.on('getRouterRtpCapabilities', (_, callback) => {
+        socket.on("getRouterRtpCapabilities", (_, callback) => {
             if (!roomList.has(socket.room_id)) {
-                return callback({ error: 'Room not found' });
+                return callback({ error: "Room not found" });
             }
 
-            log.debug('Get RouterRtpCapabilities', getPeerName());
+            log.debug("Get RouterRtpCapabilities", getPeerName());
             try {
                 callback(roomList.get(socket.room_id).getRtpCapabilities());
             } catch (err) {
@@ -780,49 +767,49 @@ function startServer() {
             }
         });
 
-        socket.on('getProducers', () => {
+        socket.on("getProducers", () => {
             if (!roomList.has(socket.room_id)) return;
 
-            log.debug('Get producers', getPeerName());
+            log.debug("Get producers", getPeerName());
 
             // send all the current producer to newly joined member
             let producerList = roomList.get(socket.room_id).getProducerListForPeer();
 
-            socket.emit('newProducers', producerList);
+            socket.emit("newProducers", producerList);
         });
 
-        socket.on('createWebRtcTransport', async (_, callback) => {
+        socket.on("createWebRtcTransport", async (_, callback) => {
             if (!roomList.has(socket.room_id)) {
-                return callback({ error: 'Room not found' });
+                return callback({ error: "Room not found" });
             }
 
-            log.debug('Create webrtc transport', getPeerName());
+            log.debug("Create webrtc transport", getPeerName());
             try {
                 const { params } = await roomList.get(socket.room_id).createWebRtcTransport(socket.id);
                 callback(params);
             } catch (err) {
-                log.error('Create WebRtc Transport error: ', err.message);
+                log.error("Create WebRtc Transport error: ", err.message);
                 callback({
                     error: err.message,
                 });
             }
         });
 
-        socket.on('connectTransport', async ({ transport_id, dtlsParameters }, callback) => {
+        socket.on("connectTransport", async ({ transport_id, dtlsParameters }, callback) => {
             if (!roomList.has(socket.room_id)) {
-                return callback({ error: 'Room not found' });
+                return callback({ error: "Room not found" });
             }
 
-            log.debug('Connect transport', getPeerName());
+            log.debug("Connect transport", getPeerName());
 
             await roomList.get(socket.room_id).connectPeerTransport(socket.id, transport_id, dtlsParameters);
 
-            callback('success');
+            callback("success");
         });
 
-        socket.on('produce', async ({ producerTransportId, kind, appData, rtpParameters }, callback) => {
+        socket.on("produce", async ({ producerTransportId, kind, appData, rtpParameters }, callback) => {
             if (!roomList.has(socket.room_id)) {
-                return callback({ error: 'Room not found' });
+                return callback({ error: "Room not found" });
             }
 
             let peer_name = getPeerName(false);
@@ -841,7 +828,7 @@ function startServer() {
                 .get(socket.room_id)
                 .produce(socket.id, producerTransportId, rtpParameters, kind, appData.mediaType);
 
-            log.debug('Produce', {
+            log.debug("Produce", {
                 kind: kind,
                 type: appData.mediaType,
                 peer_name: peer_name,
@@ -850,7 +837,7 @@ function startServer() {
             });
 
             // add & monitor producer audio level
-            if (kind === 'audio') {
+            if (kind === "audio") {
                 roomList.get(socket.room_id).addProducerToAudioLevelObserver({ producerId: producer_id });
             }
 
@@ -859,16 +846,16 @@ function startServer() {
             });
         });
 
-        socket.on('consume', async ({ consumerTransportId, producerId, rtpCapabilities }, callback) => {
+        socket.on("consume", async ({ consumerTransportId, producerId, rtpCapabilities }, callback) => {
             if (!roomList.has(socket.room_id)) {
-                return callback({ error: 'Room not found' });
+                return callback({ error: "Room not found" });
             }
 
             let params = await roomList
                 .get(socket.room_id)
                 .consume(socket.id, consumerTransportId, producerId, rtpCapabilities);
 
-            log.debug('Consuming', {
+            log.debug("Consuming", {
                 peer_name: getPeerName(false),
                 producer_id: producerId,
                 consumer_id: params ? params.id : undefined,
@@ -877,57 +864,57 @@ function startServer() {
             callback(params);
         });
 
-        socket.on('producerClosed', (data) => {
+        socket.on("producerClosed", (data) => {
             if (!roomList.has(socket.room_id)) return;
 
-            log.debug('Producer close', data);
+            log.debug("Producer close", data);
 
             // peer_info audio Or video OFF
             roomList.get(socket.room_id).getPeers().get(socket.id).updatePeerInfo(data);
             roomList.get(socket.room_id).closeProducer(socket.id, data.producer_id);
         });
 
-        socket.on('resume', async (_, callback) => {
+        socket.on("resume", async (_, callback) => {
             await consumer.resume();
             callback();
         });
 
-        socket.on('getRoomInfo', (_, cb) => {
+        socket.on("getRoomInfo", (_, cb) => {
             if (!roomList.has(socket.room_id)) return;
 
-            log.debug('Send Room Info to', getPeerName());
+            log.debug("Send Room Info to", getPeerName());
             cb(roomList.get(socket.room_id).toJson());
         });
 
-        socket.on('refreshParticipantsCount', () => {
+        socket.on("refreshParticipantsCount", () => {
             if (!roomList.has(socket.room_id)) return;
 
             let data = {
                 room_id: socket.room_id,
                 peer_counts: roomList.get(socket.room_id).getPeers().size,
             };
-            log.debug('Refresh Participants count', data);
-            roomList.get(socket.room_id).broadCast(socket.id, 'refreshParticipantsCount', data);
+            log.debug("Refresh Participants count", data);
+            roomList.get(socket.room_id).broadCast(socket.id, "refreshParticipantsCount", data);
         });
 
-        socket.on('message', (dataObject) => {
+        socket.on("message", (dataObject) => {
             if (!roomList.has(socket.room_id)) return;
 
             // const data = checkXSS(dataObject);
             const data = dataObject;
 
-            log.debug('message', data);
-            if (data.to_peer_id == 'all') {
-                roomList.get(socket.room_id).broadCast(socket.id, 'message', data);
+            log.debug("message", data);
+            if (data.to_peer_id == "all") {
+                roomList.get(socket.room_id).broadCast(socket.id, "message", data);
             } else {
-                roomList.get(socket.room_id).sendTo(data.to_peer_id, 'message', data);
+                roomList.get(socket.room_id).sendTo(data.to_peer_id, "message", data);
             }
         });
 
-        socket.on('disconnect', () => {
+        socket.on("disconnect", () => {
             if (!roomList.has(socket.room_id)) return;
 
-            log.debug('Disconnect', getPeerName());
+            log.debug("Disconnect", getPeerName());
 
             roomList.get(socket.room_id).removePeer(socket.id);
 
@@ -939,29 +926,26 @@ function startServer() {
                     roomList.get(socket.room_id).setLobbyEnabled(false);
                 }
                 delete presenters[socket.room_id];
-                log.debug(
-                  "Disconnect - current presenters grouped by roomId",
-                  presenters
-                );
+                log.debug("Disconnect - current presenters grouped by roomId", presenters);
             }
 
-            roomList.get(socket.room_id).broadCast(socket.id, 'removeMe', removeMeData());
+            roomList.get(socket.room_id).broadCast(socket.id, "removeMe", removeMeData());
 
             removeIP(socket);
         });
 
-        socket.on('exitRoom', async (_, callback) => {
+        socket.on("exitRoom", async (_, callback) => {
             if (!roomList.has(socket.room_id)) {
                 return callback({
-                    error: 'Not currently in a room',
+                    error: "Not currently in a room",
                 });
             }
-            log.debug('Exit room', getPeerName());
+            log.debug("Exit room", getPeerName());
 
             // close transports
             await roomList.get(socket.room_id).removePeer(socket.id);
 
-            roomList.get(socket.room_id).broadCast(socket.id, 'removeMe', removeMeData());
+            roomList.get(socket.room_id).broadCast(socket.id, "removeMe", removeMeData());
 
             if (roomList.get(socket.room_id).getPeers().size === 0) {
                 roomList.delete(socket.room_id);
@@ -971,7 +955,7 @@ function startServer() {
 
             removeIP(socket);
 
-            callback('Successfully exited room');
+            callback("Successfully exited room");
         });
 
         // common
@@ -980,7 +964,7 @@ function startServer() {
                 let peer_name =
                     (roomList.get(socket.room_id) &&
                         roomList.get(socket.room_id).getPeers()?.get(socket.id)?.peer_info?.peer_name) ||
-                    'undefined';
+                    "undefined";
                 if (json) {
                     return {
                         peer_name: peer_name,
@@ -988,8 +972,8 @@ function startServer() {
                 }
                 return peer_name;
             } catch (err) {
-                log.error('getPeerName', err);
-                return json ? { peer_name: 'undefined' } : 'undefined';
+                log.error("getPeerName", err);
+                return json ? { peer_name: "undefined" } : "undefined";
             }
         }
 
@@ -1002,15 +986,15 @@ function startServer() {
         }
 
         function bytesToSize(bytes) {
-            let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-            if (bytes == 0) return '0 Byte';
+            let sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+            if (bytes == 0) return "0 Byte";
             let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-            return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+            return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
         }
     });
 
     function getIP(req) {
-        return req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        return req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     }
     function allowedIP(ip) {
         return authHost != null && authHost.isAuthorized(ip);
@@ -1021,7 +1005,7 @@ function startServer() {
             if (ip && allowedIP(ip)) {
                 authHost.deleteIP(ip);
                 hostCfg.authenticated = false;
-                log.debug('Remove IP from auth', { ip: ip });
+                log.debug("Remove IP from auth", { ip: ip });
             }
         }
     }

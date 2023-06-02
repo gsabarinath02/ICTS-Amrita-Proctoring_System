@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const config = require('./config');
-const { v4: uuidV4 } = require('uuid');
+const config = require("./config");
+const { v4: uuidV4 } = require("uuid");
 
 module.exports = class ServerApi {
     constructor(host = null, authorization = null) {
@@ -16,26 +16,26 @@ module.exports = class ServerApi {
     }
 
     getMeetingURL() {
-        return 'https://' + this._host + '/join/' + uuidV4();
+        return "https://" + this._host + "/join/" + uuidV4();
     }
 
     getJoinURL(data) {
         return (
-            'https://' +
+            "https://" +
             this._host +
-            '/join?room=' +
+            "/join?room=" +
             data.room +
-            '&password=' +
+            "&password=" +
             data.password +
-            '&name=' +
+            "&name=" +
             data.name +
-            '&audio=' +
+            "&audio=" +
             data.audio +
-            '&video=' +
+            "&video=" +
             data.video +
-            '&screen=' +
+            "&screen=" +
             data.screen +
-            '&notify=' +
+            "&notify=" +
             data.notify
         );
     }

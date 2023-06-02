@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const Logger = require('./Logger');
-const log = new Logger('Host');
+const Logger = require("./Logger");
+const log = new Logger("Host");
 
 module.exports = class Host {
     constructor(ip, authorized) {

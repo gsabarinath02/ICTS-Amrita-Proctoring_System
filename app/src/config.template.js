@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
-const os = require('os');
+const os = require("os");
 const ifaces = os.networkInterfaces();
 
 const getLocalIp = () => {
-    let localIp = '127.0.0.1';
+    let localIp = "127.0.0.1";
     Object.keys(ifaces).forEach((ifname) => {
         for (const iface of ifaces[ifname]) {
             // Ignore IPv6 and 127.0.0.1
-            if (iface.family !== 'IPv4' || iface.internal !== false) {
+            if (iface.family !== "IPv4" || iface.internal !== false) {
                 continue;
             }
             // Set the local ip to the first IPv4 address found and exit the loop
@@ -28,22 +28,22 @@ module.exports = {
         hostProtected to true and set your own Username and Password
     */
     hostProtected: false,
-    hostUsername: 'username',
-    hostPassword: 'password',
+    hostUsername: "username",
+    hostPassword: "password",
     // app listen on
-    listenIp: '0.0.0.0',
+    listenIp: "0.0.0.0",
     listenPort: process.env.PORT || 3010,
     // ssl/README.md
-    sslCrt: '../ssl/cert.pem',
-    sslKey: '../ssl/key.pem',
+    sslCrt: "../ssl/cert.pem",
+    sslKey: "../ssl/key.pem",
     /* 
     Ngrok
         1. Goto https://ngrok.com
         2. Get started for free 
         3. Copy YourNgrokAuthToken: https://dashboard.ngrok.com/get-started/your-authtoken
     */
-    ngrokAuthToken: '',
-    apiKeySecret: 'AmritaShare_default_secret',
+    ngrokAuthToken: "",
+    apiKeySecret: "AmritaShare_default_secret",
     sentry: {
         /*
         Sentry
@@ -52,7 +52,7 @@ module.exports = {
             3. On dashboard goto Settings/Projects/YourProjectName/Client Keys (DSN)
         */
         enabled: false,
-        DSN: '',
+        DSN: "",
         tracesSampleRate: 0.5,
     },
     slack: {
@@ -63,7 +63,7 @@ module.exports = {
             4. Create a Slash Commands and put as Request URL: https://your.domain.name/slack
         */
         enabled: false,
-        signingSecret: '',
+        signingSecret: "",
     },
     mediasoup: {
         // Worker settings
@@ -71,55 +71,55 @@ module.exports = {
         worker: {
             rtcMinPort: 40000,
             rtcMaxPort: 40100,
-            logLevel: 'error',
-            logTags: ['info', 'ice', 'dtls', 'rtp', 'srtp', 'rtcp', 'rtx', 'bwe', 'score', 'simulcast', 'svc', 'sctp'],
+            logLevel: "error",
+            logTags: ["info", "ice", "dtls", "rtp", "srtp", "rtcp", "rtx", "bwe", "score", "simulcast", "svc", "sctp"],
         },
         // Router settings
         router: {
             mediaCodecs: [
                 {
-                    kind: 'audio',
-                    mimeType: 'audio/opus',
+                    kind: "audio",
+                    mimeType: "audio/opus",
                     clockRate: 48000,
                     channels: 2,
                 },
                 {
-                    kind: 'video',
-                    mimeType: 'video/VP8',
+                    kind: "video",
+                    mimeType: "video/VP8",
                     clockRate: 90000,
                     parameters: {
-                        'x-google-start-bitrate': 1000,
+                        "x-google-start-bitrate": 1000,
                     },
                 },
                 {
-                    kind: 'video',
-                    mimeType: 'video/VP9',
+                    kind: "video",
+                    mimeType: "video/VP9",
                     clockRate: 90000,
                     parameters: {
-                        'profile-id': 2,
-                        'x-google-start-bitrate': 1000,
+                        "profile-id": 2,
+                        "x-google-start-bitrate": 1000,
                     },
                 },
                 {
-                    kind: 'video',
-                    mimeType: 'video/h264',
+                    kind: "video",
+                    mimeType: "video/h264",
                     clockRate: 90000,
                     parameters: {
-                        'packetization-mode': 1,
-                        'profile-level-id': '4d0032',
-                        'level-asymmetry-allowed': 1,
-                        'x-google-start-bitrate': 1000,
+                        "packetization-mode": 1,
+                        "profile-level-id": "4d0032",
+                        "level-asymmetry-allowed": 1,
+                        "x-google-start-bitrate": 1000,
                     },
                 },
                 {
-                    kind: 'video',
-                    mimeType: 'video/h264',
+                    kind: "video",
+                    mimeType: "video/h264",
                     clockRate: 90000,
                     parameters: {
-                        'packetization-mode': 1,
-                        'profile-level-id': '42e01f',
-                        'level-asymmetry-allowed': 1,
-                        'x-google-start-bitrate': 1000,
+                        "packetization-mode": 1,
+                        "profile-level-id": "42e01f",
+                        "level-asymmetry-allowed": 1,
+                        "x-google-start-bitrate": 1000,
                     },
                 },
             ],
@@ -128,7 +128,7 @@ module.exports = {
         webRtcTransport: {
             listenIps: [
                 {
-                    ip: '0.0.0.0',
+                    ip: "0.0.0.0",
                     announcedIp: getLocalIp(), // replace by public static IPV4 address https://api.ipify.org
                 }, //announcedIp: '' will be auto-detected on server start, for docker localPC set '127.0.0.1'
             ],

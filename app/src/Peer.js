@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const Logger = require('./Logger');
-const log = new Logger('Peer');
+const Logger = require("./Logger");
+const log = new Logger("Peer");
 
 module.exports = class Peer {
     constructor(socket_id, data) {
@@ -23,40 +23,40 @@ module.exports = class Peer {
     // ####################################################
 
     updatePeerInfo(data) {
-        log.debug('Update peer info', data);
+        log.debug("Update peer info", data);
         switch (data.type) {
-          case "audio":
-          case "audioType":
-            this.peer_info.peer_audio = data.status;
-            this.peer_audio = data.status;
-            break;
-          case "video":
-          case "videoType":
-            this.peer_info.peer_video = data.status;
-            this.peer_video = data.status;
-            if (data.status == false) {
-              this.peer_info.peer_video_privacy = data.status;
-              this.peer_video_privacy = data.status;
-            }
-            break;
-          case "screen":
-          case "screenType":
-            this.peer_info.peer_screen = data.status;
-            break;
-          case "hand":
-            this.peer_info.peer_hand = data.status;
-            this.peer_hand = data.status;
-            break;
-          case "privacy":
-            this.peer_info.peer_video_privacy = data.status;
-            this.peer_video_privacy = data.status;
-            break;
-          case "presenter":
-            this.peer_info.peer_presenter = data.status;
-            this.peer_presenter = data.status;
-            break;
-          default:
-            break;
+            case "audio":
+            case "audioType":
+                this.peer_info.peer_audio = data.status;
+                this.peer_audio = data.status;
+                break;
+            case "video":
+            case "videoType":
+                this.peer_info.peer_video = data.status;
+                this.peer_video = data.status;
+                if (data.status == false) {
+                    this.peer_info.peer_video_privacy = data.status;
+                    this.peer_video_privacy = data.status;
+                }
+                break;
+            case "screen":
+            case "screenType":
+                this.peer_info.peer_screen = data.status;
+                break;
+            case "hand":
+                this.peer_info.peer_hand = data.status;
+                this.peer_hand = data.status;
+                break;
+            case "privacy":
+                this.peer_info.peer_video_privacy = data.status;
+                this.peer_video_privacy = data.status;
+                break;
+            case "presenter":
+                this.peer_info.peer_presenter = data.status;
+                this.peer_presenter = data.status;
+                break;
+            default:
+                break;
         }
     }
 
@@ -98,18 +98,18 @@ module.exports = class Peer {
 
         this.producers.set(producer.id, producer);
 
-        log.debug('Producer ----->', { type: producer.type });
+        log.debug("Producer ----->", { type: producer.type });
 
-        if (['simulcast', 'svc'].includes(producer.type)) {
-            log.debug('Producer scalabilityMode ----->', {
+        if (["simulcast", "svc"].includes(producer.type)) {
+            log.debug("Producer scalabilityMode ----->", {
                 scalabilityMode: producer.rtpParameters.encodings[0].scalabilityMode,
             });
         }
 
         producer.on(
-            'transportclose',
+            "transportclose",
             function () {
-                log.debug('Producer transport close', {
+                log.debug("Producer transport close", {
                     peer_name: this.peer_info.peer_name,
                     consumer_id: producer.id,
                 });
@@ -126,7 +126,7 @@ module.exports = class Peer {
         try {
             this.producers.get(producer_id).close();
         } catch (ex) {
-            log.warn('Close Producer', ex);
+            log.warn("Close Producer", ex);
         }
         this.producers.delete(producer_id);
     }
@@ -146,31 +146,31 @@ module.exports = class Peer {
                 paused: false,
             });
         } catch (error) {
-            return console.error('Consume failed', error);
+            return console.error("Consume failed", error);
         }
 
-        log.debug('Consumer ----->', { type: consumer.type });
+        log.debug("Consumer ----->", { type: consumer.type });
 
         // https://www.w3.org/TR/webrtc-svc/
 
         switch (consumer.type) {
-            case 'simulcast':
+            case "simulcast":
                 // L1T3/L2T3/L3T3
                 await consumer.setPreferredLayers({
                     spatialLayer: 3, // 1/2/3
                     temporalLayer: 3,
                 });
-                log.debug('Consumer scalabilityMode ----->', {
+                log.debug("Consumer scalabilityMode ----->", {
                     scalabilityMode: consumer.rtpParameters.encodings[0].scalabilityMode,
                 });
                 break;
-            case 'svc':
+            case "svc":
                 // L3T3
                 await consumer.setPreferredLayers({
                     spatialLayer: 3,
                     temporalLayer: 3,
                 });
-                log.debug('Consumer scalabilityMode ----->', {
+                log.debug("Consumer scalabilityMode ----->", {
                     scalabilityMode: consumer.rtpParameters.encodings[0].scalabilityMode,
                 });
                 break;
@@ -181,9 +181,9 @@ module.exports = class Peer {
         this.consumers.set(consumer.id, consumer);
 
         consumer.on(
-            'transportclose',
+            "transportclose",
             function () {
-                log.debug('Consumer transport close', {
+                log.debug("Consumer transport close", {
                     peer_name: this.peer_info.peer_name,
                     consumer_id: consumer.id,
                 });

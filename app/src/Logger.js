@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const util = require('util');
+const util = require("util");
 
-const colors = require('colors');
+const colors = require("colors");
 
 colors.enable(); //colors.disable();
 
@@ -11,7 +11,7 @@ const options = {
     colors: true,
 };
 module.exports = class Logger {
-    constructor(appName = 'AmritaShare', debugOn = true) {
+    constructor(appName = "AmritaShare", debugOn = true) {
         this.appName = colors.yellow(appName);
         this.debugOn = debugOn;
         this.timeStart = Date.now();
@@ -19,12 +19,12 @@ module.exports = class Logger {
         this.timeElapsedMs = null;
     }
 
-    debug(msg, op = '') {
+    debug(msg, op = "") {
         if (this.debugOn) {
             this.timeEnd = Date.now();
             this.timeElapsedMs = this.getFormatTime(Math.floor(this.timeEnd - this.timeStart));
             console.debug(
-                '[' + this.getDataTime() + '] [' + this.appName + '] ' + msg,
+                "[" + this.getDataTime() + "] [" + this.appName + "] " + msg,
                 util.inspect(op, options),
                 this.timeElapsedMs,
             );
@@ -32,51 +32,51 @@ module.exports = class Logger {
         }
     }
 
-    log(msg, op = '') {
-        console.log('[' + this.getDataTime() + '] [' + this.appName + '] ' + msg, util.inspect(op, options));
+    log(msg, op = "") {
+        console.log("[" + this.getDataTime() + "] [" + this.appName + "] " + msg, util.inspect(op, options));
     }
 
-    info(msg, op = '') {
+    info(msg, op = "") {
         console.info(
-            '[' + this.getDataTime() + '] [' + this.appName + '] ' + colors.green(msg),
+            "[" + this.getDataTime() + "] [" + this.appName + "] " + colors.green(msg),
             util.inspect(op, options),
         );
     }
 
-    warn(msg, op = '') {
+    warn(msg, op = "") {
         console.warn(
-            '[' + this.getDataTime() + '] [' + this.appName + '] ' + colors.yellow(msg),
+            "[" + this.getDataTime() + "] [" + this.appName + "] " + colors.yellow(msg),
             util.inspect(op, options),
         );
     }
 
-    error(msg, op = '') {
+    error(msg, op = "") {
         console.error(
-            '[' + this.getDataTime() + '] [' + this.appName + '] ' + colors.red(msg),
+            "[" + this.getDataTime() + "] [" + this.appName + "] " + colors.red(msg),
             util.inspect(op, options),
         );
     }
 
     getDataTime() {
-        return colors.cyan(new Date().toISOString().replace(/T/, ' ').replace(/Z/, ''));
+        return colors.cyan(new Date().toISOString().replace(/T/, " ").replace(/Z/, ""));
     }
 
     getFormatTime(ms) {
         let time = Math.floor(ms);
-        let type = 'ms';
+        let type = "ms";
 
         if (ms >= 1000) {
             time = Math.floor((ms / 1000) % 60);
-            type = 's';
+            type = "s";
         }
         if (ms >= 60000) {
             time = Math.floor((ms / 1000 / 60) % 60);
-            type = 'm';
+            type = "m";
         }
         if (ms >= (3, 6e6)) {
             time = Math.floor((ms / 1000 / 60 / 60) % 24);
-            type = 'h';
+            type = "h";
         }
-        return colors.magenta('+' + time + type);
+        return colors.magenta("+" + time + type);
     }
 };

@@ -1,24 +1,23 @@
-'use strict';
+"use strict";
 
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
-const API_KEY = 'amrita-share_default_secret';
-const AmritaShare_URL = 'https://sfu.amrita-share.com/api/v1/meeting';
+const API_KEY = "amrita-share_default_secret";
+const AmritaShare_URL = "https://sfu.amrita-share.com/api/v1/meeting";
 // const AmritaShare_URL = 'http://localhost:3010/api/v1/join';
 
 function getResponse() {
     return fetch(AmritaShare_URL, {
-        method: 'POST',
+        method: "POST",
         headers: {
             authorization: API_KEY,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
     });
 }
 
 getResponse().then(async (res) => {
-    console.log('Status code:', res.status);
+    console.log("Status code:", res.status);
     const data = await res.json();
-    console.log('meeting:', data.meeting);
+    console.log("meeting:", data.meeting);
 });
-

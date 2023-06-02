@@ -51,7 +51,7 @@ const image = {
   users: "../images/participants.png",
   user: "../images/participant.png",
   username: "../images/user.png",
-  Error : "../images/error.png",
+  Error: "../images/error.png",
   videoShare: "../images/video-share.png",
   message: "../images/message.png",
   share: "../images/share.png",
@@ -2638,7 +2638,10 @@ class RoomClient {
           cam.style.height = "100%";
           this.togglePin(pinVideoPosition.value);
           this.videoPinMediaContainer.appendChild(cam);
-          this.videoPinMediaContainer.style.display = BUTTONS.settings.streamsAvailable ? "block" : 'none';
+          this.videoPinMediaContainer.style.display = BUTTONS.settings
+            .streamsAvailable
+            ? "block"
+            : "none";
           this.pinnedVideoPlayerId = elemId;
           setColor(btnPn, "lime");
         } else {
@@ -2852,33 +2855,33 @@ class RoomClient {
     }
   }
 
-toggleChat() {
-  let chatRoom = this.getId("chatRoom");
-  if (this.isChatOpen == false) {
-    chatRoom.style.display = "block";
-    chatRoom.style.top = "50%";
-    chatRoom.style.left = "50%";
-    this.sound("open");
-    this.isChatOpen = true;
-    this.requestNotificationPermission(); // Request permission for notifications
-    // this.showNotification("Chat box opened!!"); // Show a notification
-  } else {
-    chatRoom.style.display = "none";
-    this.isChatOpen = false;
+  toggleChat() {
+    let chatRoom = this.getId("chatRoom");
+    if (this.isChatOpen == false) {
+      chatRoom.style.display = "block";
+      chatRoom.style.top = "50%";
+      chatRoom.style.left = "50%";
+      this.sound("open");
+      this.isChatOpen = true;
+      this.requestNotificationPermission(); // Request permission for notifications
+      // this.showNotification("Chat box opened!!"); // Show a notification
+    } else {
+      chatRoom.style.display = "none";
+      this.isChatOpen = false;
+    }
   }
-}
 
-requestNotificationPermission() {
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
+  requestNotificationPermission() {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
   }
-}
 
-showNotification(message) {
-  if (Notification.permission === "granted") {
-    new Notification(message);
+  showNotification(message) {
+    if (Notification.permission === "granted") {
+      new Notification(message);
+    }
   }
-}
 
   toggleChatEmoji() {
     this.getId("chatEmoji").classList.toggle("show");
@@ -2999,32 +3002,35 @@ showNotification(message) {
     });
   }
 
-showMessage(data) {
-  if (!this.isChatOpen && this.showChatOnMessage) this.toggleChat();
-  this.setMsgAvatar("left", data.peer_name);
-  this.appendMessage(
-    "left",
-    this.leftMsgAvatar,
-    data.peer_name,
-    data.peer_id,
-    data.peer_msg,
-    data.to_peer_id,
-    data.to_peer_name
-  );
-  
-  if (this.isChatOpen) {
-    this.requestNotificationPermission(); // Request permission for notifications
-    this.showNotification(`New message from ${data.peer_name}: ${data.peer_msg}`); // Show a notification
-  }
+  showMessage(data) {
+    if (!this.isChatOpen && this.showChatOnMessage) this.toggleChat();
+    this.setMsgAvatar("left", data.peer_name);
+    this.appendMessage(
+      "left",
+      this.leftMsgAvatar,
+      data.peer_name,
+      data.peer_id,
+      data.peer_msg,
+      data.to_peer_id,
+      data.to_peer_name
+    );
 
-  if (this.showChatOnMessage) {
-    this.userLog("info", `💬 New message from: ${data.peer_name}`, "top-end");
-    this.requestNotificationPermission(); // Request permission for notifications
-    this.showNotification(`New message from ${data.peer_name}: ${data.peer_msg}`); // Show a notification
-  }
-  this.sound("message");
-}
+    if (this.isChatOpen) {
+      this.requestNotificationPermission(); // Request permission for notifications
+      this.showNotification(
+        `New message from ${data.peer_name}: ${data.peer_msg}`
+      ); // Show a notification
+    }
 
+    if (this.showChatOnMessage) {
+      this.userLog("info", `💬 New message from: ${data.peer_name}`, "top-end");
+      this.requestNotificationPermission(); // Request permission for notifications
+      this.showNotification(
+        `New message from ${data.peer_name}: ${data.peer_msg}`
+      ); // Show a notification
+    }
+    this.sound("message");
+  }
 
   setMsgAvatar(avatar, peerName) {
     // let avatarImg =

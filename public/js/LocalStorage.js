@@ -1,11 +1,11 @@
-'use-strict';
+"use-strict";
 
 class LocalStorage {
     constructor() {
         this.MEDIA_TYPE = {
-            audio: 'audio',
-            video: 'video',
-            speaker: 'speaker',
+            audio: "audio",
+            video: "video",
+            speaker: "speaker",
         };
 
         this.DEVICES_COUNT = {
@@ -53,11 +53,10 @@ class LocalStorage {
             default:
                 break;
         }
-        localStorage.setItem('LOCAL_STORAGE_DEVICES', JSON.stringify(this.LOCAL_STORAGE_DEVICES));
+        localStorage.setItem("LOCAL_STORAGE_DEVICES", JSON.stringify(this.LOCAL_STORAGE_DEVICES));
     }
 
     getLocalStorageDevices() {
-        return JSON.parse(localStorage.getItem('LOCAL_STORAGE_DEVICES'));
+        return JSON.parse(localStorage.getItem("LOCAL_STORAGE_DEVICES"));
     }
 }
-

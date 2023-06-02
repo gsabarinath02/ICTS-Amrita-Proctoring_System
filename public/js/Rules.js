@@ -1,4 +1,4 @@
-'use-strict';
+"use-strict";
 
 let isPresenter = false;
 
@@ -9,68 +9,68 @@ let isPresenter = false;
 const isRulesActive = true;
 
 const BUTTONS = {
-  main: {
-    shareButton: false,
-    hideMeButton: true,
-    startAudioButton: true,
-    startVideoButton: true,
-    startScreenButton: true,
-    swapCameraButton: true,
-    chatButton: true,
-    participantsButton: true,
-    whiteboardButton: true,
-    settingsButton: true,
-    aboutButton: false, 
-    exitButton: true,
-    raiseHand: true,
-  },
-  settings: {
-    lockRoomButton: true,
-    unlockRoomButton: true,
-    lobbyButton: true,
-    tabRecording: true,
-    streamsAvailable: true
-  },
-  producerVideo: {
-    fullScreenButton: true,
-    snapShotButton: true,
-    muteAudioButton: true,
-    videoPrivacyButton: false,
-  },
-  consumerVideo: {
-    fullScreenButton: true,
-    snapShotButton: false,
-    sendMessageButton: false,
-    sendFileButton:false,
-    sendVideoButton: false,
-    muteVideoButton: false,
-    muteAudioButton: false,
-    audioVolumeInput: true,
-    ejectButton: false,
-  },
-  videoOff: {
-    sendMessageButton: false,
-    sendFileButton: false,
-    sendVideoButton: false,
-    muteAudioButton: false,
-    audioVolumeInput: false,
-    ejectButton: false,
-  },
-  chat: {
-    chatSaveButton: true,
-    chatEmojiButton: true,
-    chatMarkdownButton: true,
-    chatShareFileButton: true,
-    chatSpeechStartButton: true,
-  },
-  participantsList: {
-    saveInfoButton: true,
-  },
-  //...
+    main: {
+        shareButton: false,
+        hideMeButton: true,
+        startAudioButton: true,
+        startVideoButton: true,
+        startScreenButton: true,
+        swapCameraButton: true,
+        chatButton: true,
+        participantsButton: true,
+        whiteboardButton: true,
+        settingsButton: true,
+        aboutButton: false,
+        exitButton: true,
+        raiseHand: true,
+    },
+    settings: {
+        lockRoomButton: true,
+        unlockRoomButton: true,
+        lobbyButton: true,
+        tabRecording: true,
+        streamsAvailable: true,
+    },
+    producerVideo: {
+        fullScreenButton: true,
+        snapShotButton: true,
+        muteAudioButton: true,
+        videoPrivacyButton: false,
+    },
+    consumerVideo: {
+        fullScreenButton: true,
+        snapShotButton: false,
+        sendMessageButton: false,
+        sendFileButton: false,
+        sendVideoButton: false,
+        muteVideoButton: false,
+        muteAudioButton: false,
+        audioVolumeInput: true,
+        ejectButton: false,
+    },
+    videoOff: {
+        sendMessageButton: false,
+        sendFileButton: false,
+        sendVideoButton: false,
+        muteAudioButton: false,
+        audioVolumeInput: false,
+        ejectButton: false,
+    },
+    chat: {
+        chatSaveButton: true,
+        chatEmojiButton: true,
+        chatMarkdownButton: true,
+        chatShareFileButton: true,
+        chatSpeechStartButton: true,
+    },
+    participantsList: {
+        saveInfoButton: true,
+    },
+    //...
 };
 
 function handleRules(isPresenter) {
-    console.log('06.1 ----> IsPresenter: ' + isPresenter);
+    console.log("06.1 ----> IsPresenter: " + isPresenter);
     if (!isRulesActive) return;
     if (!isPresenter) {
         BUTTONS.main.settingsButton = false;
@@ -90,7 +90,7 @@ function handleRules(isPresenter) {
         BUTTONS.consumerVideo.muteVideoButton = false;
         BUTTONS.settings.streamsAvailable = false;
         //...
-    } else {   
+    } else {
         BUTTONS.main.settingsButton = true;
         BUTTONS.main.shareButton = true;
         BUTTONS.main.whiteboardButton = true;
@@ -118,8 +118,8 @@ function handleRules(isPresenter) {
     BUTTONS.main.settingsButton ? show(settingsButton) : hide(settingsButton);
     BUTTONS.main.participantsButton ? show(participantsButton) : hide(participantsButton);
     if (!BUTTONS.settings.streamsAvailable) {
-        videoMediaContainer.style.display = 'none'
-        videoPinMediaContainer.style.display = 'none';
+        videoMediaContainer.style.display = "none";
+        videoPinMediaContainer.style.display = "none";
     }
     //...
 }
