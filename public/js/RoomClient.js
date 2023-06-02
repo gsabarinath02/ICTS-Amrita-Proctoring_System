@@ -58,6 +58,7 @@ const image = {
   exit: "../images/exit.png",
   feedback: "../images/feedback.png",
   lobby: "../images/lobby.png",
+  maintanance: "../images/maintenance.gif",
 };
 
 const mediaType = {
@@ -689,13 +690,54 @@ class RoomClient {
       }.bind(this)
     );
 
+        this.socket.on(
+            'connect',
+            function () {
+                console.log('Connected to signaling server!');
+                this._isConnected = true;
+                location.reload();
+                // location.reload();
+                getPeerName() ? location.reload() : openURL(this.getDirectJoinURL());
+            }.bind(this),
+        );
+
     this.socket.on(
       "disconnect",
       function () {
         this.exit(true);
+        this.ServerAway();
       }.bind(this)
     );
   }
+
+    // ####################################################
+    // SERVER AWAY/MAINTENANCE
+    // ####################################################
+    ServerAway() {
+        this.sound('alert');
+        Swal.fire({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showDenyButton: true,
+            showConfirmButton: false,
+            background: swalBackground,
+            imageUrl: image.maintanance,
+            title: 'Server away',
+            text: 'The server seems away or in maintenance, please wait until it come back up.',
+            denyButtonText: `Leave room`,
+            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            hideClass: { popup: 'animate__animated animate__fadeOutUp' },
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                this.exit();
+            }
+        });
+    }
+
+    getDirectJoinURL() {
+        return `${window.location.origin}/join?room=${this.room_id}&password=${this.RoomPassword}&name=${this.peer_name}&audio=${this.peer_info.peer_audio}&video=${this.peer_info.peer_video}&screen=${this.peer_info.peer_screen}&notify=0`;
+    }
+
 
   // ####################################################
   // CHECK USER
