@@ -1,4 +1,4 @@
-# Amrita-Share- Self Hosting
+# Amrita-Proctor- Self Hosting
 
 ## Requirements
 

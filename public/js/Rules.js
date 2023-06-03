@@ -120,6 +120,52 @@ function handleRules(isPresenter) {
     if (!BUTTONS.settings.streamsAvailable) {
         videoMediaContainer.style.display = "none";
         videoPinMediaContainer.style.display = "none";
+        instructions();
     }
     //...
+}
+
+function instructions() {
+    this.sound("alert");
+    Swal.fire({
+        icon: "info",
+        title: "<span style='color: blue'>Proctoring Notice</span>",
+        html: `<p style="text-align: justify; color: black">This meeting is being proctored to ensure a secure and fair environment for all participants. The session is actively monitored and recorded for review, if necessary.</p>
+        <p style="text-align: justify; color: black">Any instances of misconduct or violations of exam guidelines will be taken seriously.</p>
+        <p style="text-align: justify; color: black">Please be advised that any form of malpractice or dishonest behavior during the exam may result in disqualification from the current exam. Depending on the severity of the infraction, appropriate actions will be taken, which may include further consequences such as a ban from future exams or a failing grade in the subject.</p>
+        <ul style="margin-top: 1.5rem; color:red">
+            <li>Camera and microphones should be on during the entire meeting.</li>
+            <li>Entire screen should be shared.</li>
+            <li>You are allowed to leave the room only after you submit the exam.</li>
+        </ul>
+        <p style="text-align: justify; color: black">We kindly request all participants to adhere to the highest standards of integrity and professionalism throughout the Exam. Your cooperation in maintaining a fair and respectful environment is greatly appreciated.</p>`,
+
+        showDenyButton: true,
+        denyButtonText: "I Understand",
+        showCloseButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        confirmButtonColor: "#3085d6",
+        denyButtonColor: "#d33",
+        customClass: {
+            title: "swal-title",
+            content: "swal-text",
+            actions: "swal-actions",
+            popup: "swal-popup",
+            container: "swal-wide",
+        },
+        showClass: {
+            popup: "animate__animated animate__fadeInDown",
+        },
+        hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+        },
+        onOpen: () => {
+            const swalPopup = Swal.getPopup();
+            swalPopup.classList.add("custom-popup");
+        },
+        onDeny: () => {
+            this.exit();
+        },
+    });
 }

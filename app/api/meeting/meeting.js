@@ -2,8 +2,8 @@
 
 const fetch = require("node-fetch");
 
-const API_KEY = "amrita-share_default_secret";
-const AmritaShare_URL = "https://sfu.amrita-share.com/api/v1/meeting";
+const API_KEY = "Amrita-Proctor_default_secret";
+const AmritaShare_URL = "https://sfu.Amrita-Proctor.com/api/v1/meeting";
 // const AmritaShare_URL = 'http://localhost:3010/api/v1/join';
 
 function getResponse() {

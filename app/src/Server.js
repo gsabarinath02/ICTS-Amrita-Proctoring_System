@@ -271,7 +271,7 @@ function startServer() {
         res.sendFile(views.privacy);
     });
 
-    // amrita-share about
+    // Amrita-Proctor about
     app.get(["/about"], (req, res) => {
         res.sendFile(views.about);
     });
@@ -287,7 +287,7 @@ function startServer() {
         let authorization = req.headers.authorization;
         let api = new ServerApi(host, authorization);
         if (!api.isAuthorized()) {
-            log.debug("amrita-share get meeting - Unauthorized", {
+            log.debug("Amrita-Proctor get meeting - Unauthorized", {
                 header: req.headers,
                 body: req.body,
             });
@@ -298,7 +298,7 @@ function startServer() {
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ meeting: meetingURL }));
         // log.debug the output if all done
-        log.debug("amrita-share get meeting - Authorized", {
+        log.debug("Amrita-Proctor get meeting - Authorized", {
             header: req.headers,
             body: req.body,
             meeting: meetingURL,
@@ -312,7 +312,7 @@ function startServer() {
         let authorization = req.headers.authorization;
         let api = new ServerApi(host, authorization);
         if (!api.isAuthorized()) {
-            log.debug("amrita-share get join - Unauthorized", {
+            log.debug("Amrita-Proctor get join - Unauthorized", {
                 header: req.headers,
                 body: req.body,
             });
@@ -323,7 +323,7 @@ function startServer() {
         res.setHeader("Content-Type", "application/json");
         res.end(JSON.stringify({ join: joinURL }));
         // log.debug the output if all done
-        log.debug("amrita-share get join - Authorized", {
+        log.debug("Amrita-Proctor get join - Authorized", {
             header: req.headers,
             body: req.body,
             join: joinURL,

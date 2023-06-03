@@ -16,7 +16,7 @@ function getResponse() {
         body: JSON.stringify({
             room: "test",
             password: false,
-            name: "amrita-share",
+            name: "Amrita-Proctor",
             audio: true,
             video: true,
             screen: true,

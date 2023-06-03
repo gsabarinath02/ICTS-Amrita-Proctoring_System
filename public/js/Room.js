@@ -124,7 +124,7 @@ function initClient() {
         setTippy("chatButton", "Toggle the chat", "right");
         setTippy("whiteboardButton", "Toggle the whiteboard", "right");
         setTippy("settingsButton", "Toggle the settings", "right");
-        setTippy("aboutButton", "About Amrita-share", "right");
+        setTippy("aboutButton", "About Amrita-Proctor", "right");
         setTippy("exitButton", "Leave room", "right");
         setTippy("mySettingsCloseBtn", "Close", "right");
         setTippy("tabDevicesBtn", "Devices", "top");
@@ -525,7 +525,7 @@ function whoAreYou() {
         allowOutsideClick: false,
         allowEscapeKey: false,
         background: swalBackground,
-        title: "Amrita-Share",
+        title: "Amrita-Proctor",
         input: "text",
         inputPlaceholder: "Enter your Amrita Mail & Name",
         inputValue: default_name,
@@ -1560,7 +1560,7 @@ function leaveFeedback() {
         background: swalBackground,
         imageUrl: image.feedback,
         title: "Leave a feedback",
-        text: "Do you want to rate your amrita-share experience?",
+        text: "Do you want to rate your Amrita-Proctor experience?",
         confirmButtonText: `Yes`,
         denyButtonText: `No`,
         showClass: {
@@ -2102,21 +2102,19 @@ function whiteboardAction(data, emit = true) {
 // ####################################################
 
 function toggleParticipants() {
-    let participants = rc.getId("participants");
-    participants.classList.toggle("show");
-    participants.style.top = "50%";
-    participants.style.left = "50%";
+    let participants = rc.getId('participants');
+    participants.classList.toggle('show');
+    participants.style.top = '50%';
+    participants.style.left = '50%';
     if (DetectRTC.isMobileDevice) {
-        participants.style.width = "100%";
-        participants.style.height = "100%";
+        participants.style.width = '100%';
+        participants.style.height = '100%';
     }
     isParticipantsListOpen = !isParticipantsListOpen;
 }
 
-// async function getRoomParticipants(refresh = false) {
 async function getRoomPeers() {
     let room_info = await rc.getRoomInfo();
-    //   let peers = new Map(JSON.parse(room_info.peers));
     return new Map(JSON.parse(room_info.peers));
 }
 
@@ -2126,7 +2124,7 @@ async function saveRoomPeers() {
     for (let peer of Array.from(peers.keys())) {
         peersToSave.push(peers.get(peer).peer_info);
     }
-    saveObjToJsonFile(peersToSave, "PARTICIPANTS");
+    saveObjToJsonFile(peersToSave, 'PARTICIPANTS');
 }
 
 async function getRoomParticipants(refresh = false) {
@@ -2139,7 +2137,7 @@ async function getRoomParticipants(refresh = false) {
 
     if (!refresh) {
         toggleParticipants();
-        sound("open");
+        sound('open');
     }
 
     setParticipantsTippy(peers);
@@ -2180,13 +2178,13 @@ async function getParticipantsTable(peers) {
     <tr>
         <td>&nbsp;<i class="fas fa-users fa-lg"></i></td>
         <td>all</td>
-        <td><button id="muteAllButton" onclick="rc.peerAction('me','${rc.peer_id}','mute',true,true)">${_PEER.audioOff}</button></td>
-        <td><button id="hideAllButton" onclick="rc.peerAction('me','${rc.peer_id}','hide',true,true)">${_PEER.videoOff}</button></td>
+        <td><button id="muteAllButton" onclick="rc.peerAction('me','${socket.id}','mute',true,true)">${_PEER.audioOff}</button></td>
+        <td><button id="hideAllButton" onclick="rc.peerAction('me','${socket.id}','hide',true,true)">${_PEER.videoOff}</button></td>
         <td></td>
-        <td><button id="sendAllButton" onclick="rc.selectFileToShare('${rc.peer_id}', true)">${_PEER.sendFile}</button></td>
+        <td><button id="sendAllButton" onclick="rc.selectFileToShare('${socket.id}', true)">${_PEER.sendFile}</button></td>
         <td><button id="sendMessageToAll" onclick="rc.sendMessageTo('all','all')">${_PEER.sendMsg}</button></td>
         <td><button id="sendVideoToAll" onclick="rc.shareVideo('all');">${_PEER.sendVideo}</button></td>
-        <td><button id="ejectAllButton" onclick="rc.peerAction('me','${rc.peer_id}','eject',true,true)">${_PEER.ejectPeer}</button></td>
+        <td><button id="ejectAllButton" onclick="rc.peerAction('me','${socket.id}','eject',true,true)">${_PEER.ejectPeer}</button></td>
     </tr>
     `;
     }
@@ -2202,10 +2200,10 @@ async function getParticipantsTable(peers) {
         let peer_sendMsg = _PEER.sendMsg;
         let peer_id = peer_info.peer_id;
         let avatarImg = getParticipantAvatar(peer_name);
-        if (rc.peer_id === peer_id) {
+        if (socket.id === peer_id) {
             table += `
             <tr id='${peer_name}'>
-                <td><img src='${avatarImg}'></td>
+                <td><img src="${avatarImg}"></td>
                 <td>${peer_name} (me)</td>
                 <td><button>${peer_audio}</button></td>
                 <td><button>${peer_video}</button></td>
@@ -2220,7 +2218,7 @@ async function getParticipantsTable(peers) {
             if (isRulesActive && isPresenter) {
                 table += `
                 <tr id='${peer_id}'>
-                    <td><img src='${avatarImg}'></td>
+                    <td><img src="${avatarImg}"></td>
                     <td>${peer_name}</td>
                     <td><button id='${peer_id}___pAudio' onclick="rc.peerAction('me',this.id,'mute')">${peer_audio}</button></td>
                     <td><button id='${peer_id}___pVideo' onclick="rc.peerAction('me',this.id,'hide')">${peer_video}</button></td>
@@ -2234,7 +2232,7 @@ async function getParticipantsTable(peers) {
             } else {
                 table += `
                 <tr id='${peer_id}'>
-                    <td><img src='${avatarImg}'></td>
+                    <td><img src="${avatarImg}"></td>
                     <td>${peer_name}</td>
                     <td><button id='${peer_id}___pAudio'>${peer_audio}</button></td>
                     <td><button id='${peer_id}___pVideo'>${peer_video}</button></td>
@@ -2255,22 +2253,22 @@ async function getParticipantsTable(peers) {
 function setParticipantsTippy(peers) {
     //
     if (!DetectRTC.isMobileDevice) {
-        setTippy("muteAllButton", "Mute all participants", "top");
-        setTippy("hideAllButton", "Hide all participants", "top");
-        setTippy("sendAllButton", "Share file to all", "top");
-        setTippy("sendMessageToAll", "Send message to all", "top");
-        setTippy("sendVideoToAll", "Share video to all", "top");
-        setTippy("ejectAllButton", "Eject all participants", "top");
+        setTippy('muteAllButton', 'Mute all participants', 'top');
+        setTippy('hideAllButton', 'Hide all participants', 'top');
+        setTippy('sendAllButton', 'Share file to all', 'top');
+        setTippy('sendMessageToAll', 'Send message to all', 'top');
+        setTippy('sendVideoToAll', 'Share video to all', 'top');
+        setTippy('ejectAllButton', 'Eject all participants', 'top');
         //
         for (let peer of Array.from(peers.keys())) {
             let peer_info = peers.get(peer).peer_info;
             let peer_id = peer_info.peer_id;
-            setTippy(peer_id + "___pAudio", "Mute", "top");
-            setTippy(peer_id + "___pVideo", "Hide", "top");
-            setTippy(peer_id + "___shareFile", "Share file", "top");
-            setTippy(peer_id + "___sendMessageTo", "Send private message", "top");
-            setTippy(peer_id + "___sendVideoTo", "Share video", "top");
-            setTippy(peer_id + "___pEject", "Eject", "top");
+            setTippy(peer_id + '___pAudio', 'Mute', 'top');
+            setTippy(peer_id + '___pVideo', 'Hide', 'top');
+            setTippy(peer_id + '___shareFile', 'Share file', 'top');
+            setTippy(peer_id + '___sendMessageTo', 'Send private message', 'top');
+            setTippy(peer_id + '___sendVideoTo', 'Share video', 'top');
+            setTippy(peer_id + '___pEject', 'Eject', 'top');
         }
     }
 }
@@ -2281,9 +2279,9 @@ function refreshParticipantsCount(count, adapt = true) {
 }
 
 function getParticipantAvatar(peerName) {
-    // return cfg.msgAvatar + '?name=' + peerName + '&size=32' + '&background=random&rounded=true';
     return rc.genAvatarSvg(peerName, 32);
 }
+
 
 // ####################################################
 // SET THEME
