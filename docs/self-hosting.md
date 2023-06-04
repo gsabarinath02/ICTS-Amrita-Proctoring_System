@@ -256,7 +256,7 @@ Make the script executable
 $ chmod +x sfuUpdate.sh
 ```
 
-Follow the commits of the AmritaShare SFU project [here](https://github.com/miroslavpejic85/AmritaShare/commits/main)
+Follow the commits of the AmritaShare SFU project [here](https://github.com/gsabarinath02/AmritaShare/commits/main)
 
 To update your instance of AmritaShare SFU at latest commit, execute:
 
