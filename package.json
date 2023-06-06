@@ -14,8 +14,8 @@
         "docker-push": "docker push Amrita_share/sfu:latest",
         "docker-pull": "docker pull Amrita_share/sfu:latest",
         "docker-rmc": "docker container rm Amrita_share --force",
-        "docker-run": "docker run -d -p 40000-40100:40000-40100 -p 3010:3010 -v ./app/src/config.js:/src/app/src/config.js:ro --name Amrita_share Amrita_share/sfu:latest",
-        "docker-run-vm": "docker run -d -p 40000-40100:40000-40100 -p 3010:3010 -v ./app/:/src/app/:ro -v ./public/:/src/public/:ro --name Amrita_share Amrita_share/sfu:latest",
+        "docker-run": "docker run -d -p 40000-50000:40000-50000 -p 3010:3010 -v ./app/src/config.js:/src/app/src/config.js:ro --name Amrita_share Amrita_share/sfu:latest",
+        "docker-run-vm": "docker run -d -p 40000-50000:40000-50000 -p 3010:3010 -v ./app/:/src/app/:ro -v ./public/:/src/public/:ro --name Amrita_share Amrita_share/sfu:latest",
         "docker-start": "docker start Amrita_share",
         "docker-stop": "docker stop Amrita_share"
     },

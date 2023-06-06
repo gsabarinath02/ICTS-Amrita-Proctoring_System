@@ -62,8 +62,8 @@ Set the `inbound rules` if you have the Firewall enabled
 | Port range  | Protocol | Source    | Description         |
 | ----------- | -------- | --------- | ------------------- |
 | 3010        | TCP      | 0.0.0.0/0 | App listen on tcp   |
-| 40000-40100 | TCP      | 0.0.0.0/0 | RTC port ranges tcp |
-| 40000-40100 | UDP      | 0.0.0.0/0 | RTC port ranges udp |
+| 40000-50000 | TCP      | 0.0.0.0/0 | RTC port ranges tcp |
+| 40000-50000 | UDP      | 0.0.0.0/0 | RTC port ranges udp |
 
 ---
 

@@ -70,7 +70,7 @@ module.exports = {
         numWorkers: Object.keys(os.cpus()).length,
         worker: {
             rtcMinPort: 40000,
-            rtcMaxPort: 40100,
+            rtcMaxPort: 50000,
             logLevel: "error",
             logTags: ["info", "ice", "dtls", "rtp", "srtp", "rtcp", "rtx", "bwe", "score", "simulcast", "svc", "sctp"],
         },
