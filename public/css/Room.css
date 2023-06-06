@@ -39,7 +39,7 @@
     --msger-left: 50%;
     --msger-height: 680px;
     --msger-width: 420px;
-    --msger-bubble-width: 55%;
+    --msger-bubble-width: 85%;
     --msger-bg: radial-gradient(#393939, #000000);
     --wb-width: 800px;
     --wb-height: 600px;
@@ -50,6 +50,7 @@
     --box-shadow: 0px 8px 16px 0px rgb(0 0 0);
     --btns-hover-scale: scale(1.1);
     --settings-bg: radial-gradient(#393939, #000000);
+    --btns-bg-color: rgba(0, 0, 0, 0.7);
     /* buttons bar horizontal */
     --btns-top: 50%;
     --btns-right: 0%;
@@ -96,7 +97,7 @@ body {
 }
 
 #google_translate_element select {
-    background: #2c2c2c !important;
+    background-color: #2c2c2c !important;
 }
 
 /*--------------------------------------------------------------
@@ -140,7 +141,7 @@ body {
     width: 100%;
     margin-top: 15px;
     padding: 10px;
-    background: #2c2c2c;
+    background-color: #2c2c2c !important;
     color: white;
     border: var(--border);
     border-radius: 5px;
@@ -192,7 +193,7 @@ body {
     font-size: 1.2rem;
     padding: 10px;
     transition: all 0.3s ease-in-out;
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--btns-bg-color);
     border-radius: 10px;
     border: var(--border);
     /* box-shadow: var(--box-shadow); */
@@ -256,18 +257,20 @@ body {
 
 #mySettings i,
 #mySettings p {
-    display: inline-block;
+    display: inline-flex;
+    margin: auto;
     color: #fff;
     padding: 5px;
     background: transparent;
 }
 
 #mySettings select {
+    margin-top: 1rem;
     width: auto;
     max-width: 310px;
     height: 40px;
     color: #fff;
-    background-color: transparent;
+    background-color: #2c2c2c !important;
     border: var(--border);
     border-radius: 5px;
     cursor: pointer;
@@ -285,10 +288,32 @@ body {
     cursor: pointer;
 }
 
-#pitchBarButton,
-#soundsButton,
-#lobbyButton {
-    padding: 10px;
+/*--------------------------------------------------------------
+# Settings Table
+--------------------------------------------------------------*/
+
+.settingsTable {
+    width: 320px;
+    color: #fff;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-style: hidden;
+}
+.settingsTable td,
+th {
+    text-align: left;
+    padding: 5px;
+}
+.settingsTable tr:nth-child(even) {
+    /* background-color: #121212; */
+}
+.settingsTable i {
+    border: none;
+    border-radius: 5px;
+}
+
+#sessionTime {
+    float: right;
 }
 
 /*--------------------------------------------------------------
@@ -296,19 +321,20 @@ body {
 --------------------------------------------------------------*/
 .tab {
     overflow: hidden;
-    background-color: #000000;
+    border-radius: 5px;
 }
 
 /* Style the buttons inside the tab */
 .tab button {
-    background-color: inherit;
+    margin: 3px;
+    padding: 12px;
     float: left;
-    border: none;
+    color: #fff;
+    border: var(--border);
+    background-color: rgba(0, 0, 0, 0.2);
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
     transition: 0.3s;
-    color: #fff;
 }
 
 /* Change background color of buttons on hover */
@@ -336,22 +362,14 @@ body {
 }
 
 .tabcontent button {
-    margin-top: 5px;
+    margin-top: 10px;
     width: 100%;
     text-align: left;
 }
 
 .tabcontent button:hover {
-    background-color: #121212;
+    background-color: rgba(0, 0, 0, 0.2);
     transform: scale(1);
-}
-
-#sessionTimeButton {
-    cursor: default;
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    width: auto;
 }
 
 /* on open display devices tab */
@@ -396,7 +414,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 10px;
-    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.2);
     color: #666;
     cursor: move;
 }
@@ -405,7 +423,7 @@ body {
 .chat-header-options button {
     border: none;
     transition: all 0.3s ease-in-out;
-    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.2);
     color: #fff;
     border-radius: 5px;
     transition: background 0.23s;
@@ -540,15 +558,12 @@ body {
     width: 100%;
 }
 
-.msg-a {
-    color: #fff;
+a {
+    color: #fff !important;
 }
-.msg-a:hover {
-    color: grey;
+a:hover {
+    color: grey !important;
     transition: all 0.3s ease-in-out;
-}
-#chat-msg-a {
-    color: #fff;
 }
 
 /*--------------------------------------------------------------
@@ -569,7 +584,7 @@ body {
     border: none;
     border: var(--border);
     border-top-left-radius: 10px;
-    background: rgb(7 7 7);
+    background: rgba(0, 0, 0, 0.2);
     transition: height 1s;
     resize: none;
 }
@@ -625,7 +640,7 @@ em-emoji-picker {
 }
 .swal2-html-container {
     text-align: center;
-    color: #858585 !important;
+    color: whitesmoke !important;
     background-color: transparent !important;
 }
 
@@ -642,9 +657,6 @@ em-emoji-picker {
     background: #376df9;
 }
 
-.swal-wide {
-    width: auto !important;
-}
 /*--------------------------------------------------------------
 # About
 --------------------------------------------------------------*/
@@ -763,7 +775,7 @@ button:hover {
 .participants-header {
     display: flex;
     justify-content: space-between;
-    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     padding: 10px;
     color: #fff;
@@ -851,7 +863,7 @@ button:hover {
 .lobby-header {
     display: flex;
     justify-content: space-between;
-    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     padding: 10px;
     color: #fff;
@@ -955,7 +967,7 @@ progress {
 .whiteboard-header {
     display: flex;
     justify-content: space-between;
-    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     padding: 10px;
     color: #fff;

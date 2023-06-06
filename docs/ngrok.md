@@ -24,7 +24,7 @@ If you want to expose Amrita-Proctor from your `Local PC` to outside in `HTTPS`,
 
 | Name            | Protocol    | Port Wan    | Port Lan    | IP Destination    |
 | --------------- | ----------- | ----------- | ----------- | ----------------- |
-| `AmritaShare` | `TCP/UDP` | 40000:50000 | 30000:50000 | `Your Local IP` |
+| `AmritaShare` | `TCP/UDP` | 40000:50000 | 40000:50000 | `Your Local IP` |
 | `AmritaShare` | `TCP`     | 3010        | 3010        | `Your Local IP` |
 
 Make sure your firewall not blocking rtcPorts `range: 40000:50000`
