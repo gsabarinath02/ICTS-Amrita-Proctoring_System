@@ -3184,38 +3184,60 @@ class RoomClient {
         if (evt.data && evt.data.size > 0) recordedBlobs.push(evt.data);
     }
 
-    handleMediaRecorderStop(evt) {
-        try {
-            console.log("MediaRecorder stopped: ", evt);
-            console.log("MediaRecorder Blobs: ", recordedBlobs);
+       handleMediaRecorderStop(evt) {
+           try {
+               console.log("MediaRecorder stopped: ", evt);
+               console.log("MediaRecorder Blobs: ", recordedBlobs);
 
-            // const newDate = new Date();
-            // const date = newDate.toISOString().split("T")[0];
-            // const time = newDate.toTimeString().split(" ")[0];
-            const dateTime = getDataTimeString();
+               const dateTime = getDataTimeString();
 
-            const type = recordedBlobs[0].type.includes("mp4") ? "mp4" : "webm";
-            const blob = new Blob(recordedBlobs, { type: "video/" + type });
-            // const recFileName = `${date}-${time}` + "-REC." + type;
-            const recFileName = `${dateTime}-REC.${type}`;
+               const type = recordedBlobs[0].type.includes("mp4") ? "mp4" : "webm";
+               const blob = new Blob(recordedBlobs, { type: "video/" + type });
+               const recFileName = `${dateTime}-REC.${type}`;
+               const currentDevice = DetectRTC.isMobileDevice ? "MOBILE" : "PC";
+               const blobFileSize = bytesToSize(blob.size);
+               const recTime = document.getElementById("recordingStatus");
 
-            console.log("MediaRecorder Download Blobs");
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.style.display = "none";
-            a.href = url;
-            a.download = recFileName;
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            }, 100);
-            console.log(`🔴 Recording FILE: ${recFileName} done 👍`);
-        } catch (ex) {
-            console.warn("Recording save failed", ex);
-        }
-    }
+               Swal.fire({
+                   background: swalBackground,
+                   position: "center",
+                   icon: "success",
+                   title: "Recording",
+                   html: `
+                <div style="text-align: left;">
+                    🔴 &nbsp; Recording Info: <br/><br/>
+                    <ul>
+                        <li>Time: ${recTime.innerText}</li>
+                        <li>File: ${recFileName}</li>
+                        <li>Size: ${blobFileSize}</li>
+                    </ul>
+                    <br/>
+                    Please wait to be processed, then will be downloaded to your ${currentDevice} device.
+                </div>`,
+                   showClass: { popup: "animate__animated animate__fadeInDown" },
+                   hideClass: { popup: "animate__animated animate__fadeOutUp" },
+               });
+
+               console.log("MediaRecorder Download Blobs");
+               const url = window.URL.createObjectURL(blob);
+               const a = document.createElement("a");
+               a.style.display = "none";
+               a.href = url;
+               a.download = recFileName;
+               document.body.appendChild(a);
+               a.click();
+               setTimeout(() => {
+                   document.body.removeChild(a);
+                   window.URL.revokeObjectURL(url);
+               }, 100);
+               console.log(`🔴 Recording FILE: ${recFileName} done 👍`);
+
+               recTime.innerText = '0s';
+           } catch (ex) {
+               console.warn("Recording save failed", ex);
+           }
+       }
+
 
     pauseRecording() {
         this._isRecording = false;
@@ -3240,7 +3262,7 @@ class RoomClient {
             });
         }
         if (this.isMobileDevice) this.getId("swapCameraButton").className = "";
-        this.getId("recordingStatus").innerHTML = "0s";
+        // this.getId("recordingStatus").innerHTML = "0s";
         this.event(_EVENTS.stopRec);
         this.sound("recStop");
     }

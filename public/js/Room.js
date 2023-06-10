@@ -1415,6 +1415,7 @@ function handleRoomClientEvents() {
         hide(startRecButton);
         show(stopRecButton);
         show(pauseRecButton);
+        show(recordingTime);
         startRecordingTimer();
     });
     rc.on(RoomClient.EVENTS.pauseRec, () => {
@@ -1425,6 +1426,7 @@ function handleRoomClientEvents() {
     rc.on(RoomClient.EVENTS.resumeRec, () => {
         console.log("Room Client resume recoding");
         hide(resumeRecButton);
+        hide(recordingTime);
         show(pauseRecButton);
     });
     rc.on(RoomClient.EVENTS.stopRec, () => {
@@ -1696,6 +1698,11 @@ function isImageURL(url) {
     return url.match(/\.(jpeg|jpg|gif|png|tiff|bmp)$/) != null;
 }
 
+function isMobile(userAgent) {
+    return !!/Android|webOS|iPhone|iPad|iPod|BB10|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(userAgent || "");
+}
+
+
 function isTablet(userAgent) {
     return /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(
         userAgent,
@@ -1708,6 +1715,14 @@ function isIpad(userAgent) {
 
 function openURL(url, blank = false) {
     blank ? window.open(url, "_blank") : (window.location.href = url);
+}
+
+
+function bytesToSize(bytes) {
+    let sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    if (bytes == 0) return "0 Byte";
+    let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
 }
 
 function setCookie(name, value, expDays) {
